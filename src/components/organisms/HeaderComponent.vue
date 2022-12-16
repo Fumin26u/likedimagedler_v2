@@ -12,8 +12,8 @@ const user_id = ref<string>('')
                 <p class="caption">Twitterの画像自動ダウンローダー</p>
             </div>
             <nav class="header-nav">
-                <a href="">注意事項</a>
-                <a href="">更新履歴</a>
+                <a href="" class="btn-small blue">注意事項</a>
+                <a href="" class="btn-small blue">更新履歴</a>
             </nav>
         </div>
         <div class="header-account">

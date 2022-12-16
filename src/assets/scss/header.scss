@@ -2,6 +2,9 @@
 
 .header-container {
     @include horizontalAlignFlex();
+    padding: 0 16px;
+    border-bottom: 1px dashed $border-color;
+    box-shadow: 0 2px 4px #888;
 }
 
 .header-container > .header-left {
@@ -19,7 +22,7 @@
         margin-left: 1em;
         > a {
             @include horizontalAlign();
-            margin: 0 8px;
+            margin: 0 16px;
             font-size: 18px;
         }
     }
