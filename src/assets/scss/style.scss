@@ -77,6 +77,11 @@ a {
     }
 }
 
+em {
+    color: tomato;
+    font-style: normal;
+}
+
 h1,
 h2,
 h3 {
@@ -124,6 +129,10 @@ $color-dark-blue: hsl(200, 100%, 20%);
 
 --------------------*/
 .btn-common {
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    
     position: relative;
     display: flex;
     justify-content: space-around;
