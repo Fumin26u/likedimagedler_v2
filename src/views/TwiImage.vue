@@ -1,5 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TwiTemplate from '@/components/templates/TwiTemplate.vue';
+</script>
 
 <template>
-    <div></div>
+    <TwiTemplate />
+    <router-view></router-view>
 </template>

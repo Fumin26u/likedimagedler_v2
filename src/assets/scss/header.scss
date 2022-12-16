@@ -1,0 +1,34 @@
+@import './style.scss';
+
+.header-container {
+    @include horizontalAlignFlex();
+}
+
+.header-container > .header-left {
+    width: 60%;
+    > .title-area,
+    > .header-nav {
+        @include horizontalAlign();
+    }
+    > .title-area {
+        > .caption {
+            font-size: 14px;
+        }
+    }
+    > .header-nav {
+        margin-left: 1em;
+        > a {
+            @include horizontalAlign();
+            margin: 0 8px;
+            font-size: 18px;
+        }
+    }
+}
+
+.header-container > .header-account > div {
+    > a {
+        @include horizontalAlign();
+        margin-left: 1em;
+        width: 120px;
+    }
+}
