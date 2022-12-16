@@ -1,24 +1,5 @@
-# likedimagedler_v2
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# LikedImageDLer v2
+## 概要
+- https://github.com/Fumiya0719/LikedImageDLer の第2次開発です。
+- アプリURL: https://imagedler.com/
+- Twitterのほか、ローカル環境でpixivにも対応予定です。
