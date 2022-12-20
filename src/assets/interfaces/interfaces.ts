@@ -15,7 +15,7 @@ export interface Login {
 
 export interface TwiSearch {
     twitterID: string
-    getTweetType: 'like' | 'tweet' | 'bookmark'
+    getTweetType: 'liked_tweets' | 'tweets' | 'bookmarks'
     getNumberOfTweet: string
     isGetFromPreviousTweet: boolean
 }

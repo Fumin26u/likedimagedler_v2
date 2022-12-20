@@ -108,6 +108,7 @@ class AccountController {
             $this->response['content'] = $error;
         } else {
             session_start();
+            $_SESSION['user_id'] = (int) $rows['user_id'];
             $_SESSION['user_name'] = h($post['user_name']);
             $this->response['content'] = 'ログイン認証が完了しました。';
         }
@@ -116,7 +117,7 @@ class AccountController {
 
     // ユーザーIDを取得する
     public function getUserData() {
-        if ($_SERVER['HTTP_HOST'] === 'localhost') {
+        if ($_SERVER['HTTP_HOST'] === '') {
             $this->response['user_name'] = 'Fumiya0719';
             $this->response['content'] = 'ユーザーIDを取得しました。';
         } else {
