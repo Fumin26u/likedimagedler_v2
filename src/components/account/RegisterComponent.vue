@@ -5,7 +5,6 @@ import ApiManager from '@/components/api/apiManager'
 import { Register } from '@/assets/interfaces/interfaces'
 import '@/assets/scss/accountManager.scss'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import router from '@/router'
 
 // フォーム入力内容
@@ -44,9 +43,7 @@ const registerAccount = async () => {
     if (errorMessage.value !== '') return
 
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
-    const formData = JSON.stringify({ ...account.value })
     const response = await apiManager.post('accountManager.php', account.value)
-    console.log(response)
 
     // 入力内容が不正の場合
     if (response.error) {
@@ -54,9 +51,9 @@ const registerAccount = async () => {
         return
     }
 
-    // 返答でエラーが無い場合は指定ページにリダイレクト
-    // alert('アカウントを登録しました。')
-    // router.push('./login')
+    // 返答でエラーが無い場合は指定ページにリダイレクト    
+    alert('アカウントを登録しました。')
+    router.push('./login')
 }
 </script>
 
