@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import '@/assets/scss/twiForm.scss'
 import ApiManager from '@/components/api/apiManager'
-import { TwiSearch, TweetInfo } from '@/assets/interfaces/interfaces'
+import {
+    TwiSearch,
+    TweetInfo,
+    TweetImage,
+} from '@/assets/interfaces/interfaces'
 import { ref } from 'vue'
 
 // 入力フォームの値
@@ -39,13 +43,24 @@ const getTweet = async () => {
     if (errorMessage.value !== '') return
 
     const response = await apiManager.get('tweetManager.php', search.value)
-    console.log(response.content.tweetInfo)
+    // それぞれの画像にDL可否判定の値を追加
     tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
         return {
-            ...tweet,
-            selected: true,
+            postID: tweet.postID,
+            post_time: tweet.post_time,
+            user: tweet.user,
+            text: tweet.text,
+            url: tweet.url,
+            images: tweet.images.map((image: TweetImage, index: number) => {
+                return {
+                    id: `${tweet.postID}_${index}`,
+                    url: image,
+                    selected: true,
+                }
+            }),
         }
     })
+    console.log(tweetInfo.value)
 }
 </script>
 <template>
@@ -145,25 +160,24 @@ const getTweet = async () => {
             <p class="caption">※選択している画像をDLします。</p>
         </div>
         <div v-for="tweet in tweetInfo" :key="tweet.postID" class="tweet-info">
-            <div class="user-name">
-                <input
-                    type="checkbox"
-                    v-model="tweet.selected"
-                    :id="tweet.postID"
-                />
-                <h3>
-                    <label :for="tweet.postID">
-                        {{ tweet.user }}
-                    </label>
-                </h3>
-            </div>
+            <h3 class="user-name">{{ tweet.user }}</h3>
             <p class="tweet-text">{{ tweet.text }}</p>
             <div
-                v-for="(image, index) in tweet.images"
-                :key="index"
+                v-for="image in tweet.images"
+                :key="image.id"
                 class="tweet-image"
             >
-                <img :src="image" :alt="tweet.text" />
+                <input
+                    type="checkbox"
+                    v-model="image.selected"
+                    :id="image.id"
+                />
+                <label
+                    :for="image.id"
+                    :class="!image.selected ? 'not-selected' : ''"
+                >
+                    <img :src="image.url" :alt="tweet.text" />
+                </label>
             </div>
             <div class="tweet-url">
                 <p>ツイート元リンク</p>

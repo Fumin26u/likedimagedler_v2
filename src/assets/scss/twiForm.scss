@@ -61,8 +61,7 @@
             display: block;
             margin: 0;
         }
-        > .user-name > * {
-            @include horizontalAlign;
+        > .user-name {
             font-size: 18px;
         }
         > .tweet-text {
@@ -71,7 +70,20 @@
         }
 
         > .tweet-image {
-            @include horizontalAlignFlex;
+            @include horizontalAlign;
+            max-width: 160px;
+        }
+        > .tweet-image > input {
+            display: none;
+        }
+        > .tweet-image > label {
+            cursor: pointer;
+            &:hover, &.not-selected {
+                opacity: 0.5;
+            }
+            &:hover {
+                transition: all .2s;
+            }
         }
         > .tweet-image img {
             max-width: 160px;

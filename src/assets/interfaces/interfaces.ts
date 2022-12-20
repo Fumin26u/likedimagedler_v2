@@ -20,12 +20,17 @@ export interface TwiSearch {
     isGetFromPreviousTweet: boolean
 }
 
+export interface TweetImage {
+    id: string
+    url: string
+    selected: boolean
+}
+
 export interface TweetInfo {
     postID: string
     post_time: boolean
     user: string
     text: string
-    images: string[]
+    images: TweetImage[]
     url: string
-    selected: boolean
 }
