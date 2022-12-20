@@ -13,8 +13,8 @@ class ApiManager {
             .then((response) => {
                 return response.data
             })
-            .catch((response) => {
-                console.log(response)
+            .catch((error) => {
+                console.log(error)
                 return {
                     error: true,
                 }

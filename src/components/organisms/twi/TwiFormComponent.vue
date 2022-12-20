@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import '@/assets/scss/twiForm.scss'
-import ApiManager from '@/components/api/apiManager';
-import { TwiSearch } from '@/assets/interfaces/interfaces'
+import ApiManager from '@/components/api/apiManager'
+import { TwiSearch, TweetInfo } from '@/assets/interfaces/interfaces'
 import { ref } from 'vue'
 
 // 入力フォームの値
@@ -31,7 +31,7 @@ const inputValidation = (): string => {
 }
 
 // APIから画像付きツイートを取得
-const tweetInfo = ref<any>()
+const tweetInfo = ref<TweetInfo[]>([])
 const apiManager = new ApiManager()
 const getTweet = async () => {
     // 入力フォームのバリデーションを行いエラーがある場合は中断
@@ -39,7 +39,7 @@ const getTweet = async () => {
     if (errorMessage.value !== '') return
 
     const response = await apiManager.get('tweetManager.php', search.value)
-    console.log(response)
+    console.log(response.content.tweetInfo)
     tweetInfo.value = response.content.tweetInfo
 }
 </script>
@@ -126,9 +126,22 @@ const getTweet = async () => {
         </dl>
     </section>
     <p>{{ errorMessage }}</p>
-    <section class="tweet-list">
-        <p v-for="tweet in tweetInfo" :key="tweet.postID">
-            {{ tweet }}
-        </p>
+    <section class="tweet-list" v-if="tweetInfo.length > 0">
+        <h2>取得ツイート一覧</h2>
+        <div v-for="tweet in tweetInfo" :key="tweet.postID" class="tweet-info">
+            <h3 class="user-name">{{ tweet.user }}</h3>
+            <p class="tweet-text">{{ tweet.text }}</p>
+            <div
+                v-for="(image, index) in tweet.images"
+                :key="index"
+                class="tweet-image"
+            >
+                <img :src="image" :alt="tweet.text" />
+            </div>
+            <div class="tweet-url">
+                <p>ツイート元リンク</p>
+                <a :href="tweet.url">{{ tweet.url }}</a>
+            </div>
+        </div>
     </section>
 </template>

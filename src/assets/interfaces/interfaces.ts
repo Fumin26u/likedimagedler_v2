@@ -19,3 +19,12 @@ export interface TwiSearch {
     getNumberOfTweet: string
     isGetFromPreviousTweet: boolean
 }
+
+export interface TweetInfo {
+    postID: string
+    post_time: boolean
+    user: string
+    text: string
+    images: string[]
+    url: string
+}

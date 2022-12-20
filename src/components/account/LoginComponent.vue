@@ -49,7 +49,6 @@ const loginAccount = async () => {
         errorMessage.value = response.content
         return
     }
-    console.log(response)
 
     // 返答でエラーが無い場合は指定ページにリダイレクト
     router.push('./')
