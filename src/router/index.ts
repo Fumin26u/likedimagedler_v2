@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import TwiImage from '../views/TwiImage.vue'
 import PixImage from '../views/PixImage.vue'
 import AccountRegister from '@/views/AccountRegister.vue'
@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHashHistory(process.env.BASE_URL),
     routes,
 })
 
