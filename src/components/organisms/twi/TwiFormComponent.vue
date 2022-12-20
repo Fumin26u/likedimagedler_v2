@@ -32,8 +32,8 @@ const inputValidation = (): string => {
 
 //
 const apiManager = new ApiManager()
-const getTweet = () => {
-    const response = apiManager.get('tweetManager.php', search.value)
+const getTweet = async () => {
+    const response = await apiManager.get('tweetManager.php', search.value)
     console.log(response)
 }
 </script>
