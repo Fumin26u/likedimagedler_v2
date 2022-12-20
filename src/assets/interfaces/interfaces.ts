@@ -12,3 +12,10 @@ export interface Login {
     user_name: string
     password: string
 }
+
+export interface TwiSearch {
+    twitterID: string
+    getTweetType: 'like' | 'tweet' | 'bookmark'
+    getNumberOfTweet: string
+    isGetFromPreviousTweet: boolean
+}
