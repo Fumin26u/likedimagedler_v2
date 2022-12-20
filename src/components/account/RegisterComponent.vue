@@ -10,13 +10,14 @@ import router from '@/router'
 
 // フォーム入力内容
 const account = ref<Register>({
+    method: 'register',
     email: '',
-    user_id: '',
+    user_name: '',
     password: '',
 })
 // バリデーションパラメータ
 const regex = {
-    user_id: '^.{6,20}$',
+    user_name: '^.{6,20}$',
     password: '^([a-zA-Z0-9]{8,20})$',
 }
 // 表示用のエラーメッセージ
@@ -25,7 +26,7 @@ const errorMessage = ref<string>('')
 // バリデーションを実行し入力内容が不正であればエラーを返す
 const inputValidation = () => {
     let errorMessage = ''
-    if (!new RegExp(regex.user_id).test(account.value.user_id)) {
+    if (!new RegExp(regex.user_name).test(account.value.user_name)) {
         errorMessage = 'ユーザーIDの入力内容が空または不正です。'
     }
 
@@ -45,6 +46,7 @@ const registerAccount = async () => {
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
     const formData = JSON.stringify({ ...account.value })
     const response = await apiManager.post('accountManager.php', account.value)
+    console.log(response)
 
     // 入力内容が不正の場合
     if (response.error) {
@@ -53,8 +55,8 @@ const registerAccount = async () => {
     }
 
     // 返答でエラーが無い場合は指定ページにリダイレクト
-    alert('アカウントを登録しました。')
-    router.push('./login')
+    // alert('アカウントを登録しました。')
+    // router.push('./login')
 }
 </script>
 
@@ -81,15 +83,15 @@ const registerAccount = async () => {
                         </dd>
                     </div>
                     <div>
-                        <dt>ユーザーID</dt>
+                        <dt>ユーザー名</dt>
                         <dd>
                             <p class="caption">6文字以上20文字以下</p>
                             <input
                                 type="text"
-                                id="user_id"
-                                v-model="account.user_id"
+                                id="user_name"
+                                v-model="account.user_name"
                                 autocomplete="username"
-                                :pattern="regex.user_id"
+                                :pattern="regex.user_name"
                                 required
                             />
                         </dd>
@@ -109,7 +111,9 @@ const registerAccount = async () => {
                         </dd>
                     </div>
                 </dl>
-                <button type="submit" class="btn-common green submit">登録</button>
+                <button type="submit" class="btn-common green submit">
+                    登録
+                </button>
             </form>
         </div>
     </main>

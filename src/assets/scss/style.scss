@@ -50,7 +50,7 @@ $mq-breakpoints: (
     共通パーツ
 
 --------------------*/
-#app {
+.vue-app {
     font-family: 'Yu Gothic Medium', '游ゴシック Medium', sans-serif;
     padding: 0 0 1em;
     margin: 0 12px;
@@ -59,6 +59,7 @@ header,
 main {
     max-width: 1280px;
     margin: 0 auto;
+    background-color: white;
 }
 
 button,

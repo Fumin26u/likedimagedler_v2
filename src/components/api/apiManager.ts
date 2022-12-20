@@ -8,7 +8,7 @@ class ApiManager {
         formData: any = {}
     ): Promise<{ [key: string]: any }> {
         const formUrl = apiPath + url
-
+        console.log(formUrl)
         return await axios
             .post(formUrl, formData)
             .then((response) => {

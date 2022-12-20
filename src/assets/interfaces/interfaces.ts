@@ -1,5 +1,6 @@
 export interface Register {
+    method: 'logout' | 'login' | 'register'
     email: string
-    user_id: string
+    user_name: string
     password: string
 }
