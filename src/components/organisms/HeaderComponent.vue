@@ -25,6 +25,7 @@ const getUserInfo = async () => {
     const response = await apiManager.post('accountManager.php', {
         method: 'getUserData',
     })
+    console.log(response)
     return response.user_name
 }
 

@@ -24,15 +24,15 @@ function setCurl($req) {
     return $curl;
 }
 
-v($_SESSION);
 // 前回DLした画像以降を取得がtrueの場合DBから該当IDを取得
 $latestDL = '';
+$userID = $_SERVER['HTTP_HOST'] === 'localhost' ? 2 : (int) h($_SESSION['user_id']);
 try {
     $pdo = dbConnect();
     
     // latest_dlテーブルの確認
     $st = $pdo->prepare('SELECT post_id FROM latest_dl WHERE user_id = :user_id AND twi_id = :twi_id');
-    $st->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $st->bindValue(':user_id', $userID, PDO::PARAM_INT);
     $st->bindValue(':twi_id', h($_GET['twitterID']), PDO::PARAM_STR);
     $st->execute();
     $row = $st->fetch(PDO::FETCH_ASSOC);
@@ -73,7 +73,7 @@ $paginationToken = '';
 // ツイート情報一覧(返す値)
 $tweetList = [];
 
-while ($getTweetCount < 0) {
+while ($getTweetCount > 0) {
     $getTweetCount -= $getTweetCountOnce;
     
     // TwitterAPIに送るパラメータクエリ
@@ -137,7 +137,11 @@ while ($getTweetCount < 0) {
                 $tweetList[$tweetCounter]['images'][] = $tweetMedias[$mediaKey];
             }
         }
+
+        $tweetCounter++;
     }
+
+    $paginationToken = $tweetListQueue['meta']['next_token'];
 }
 
 echo json_encode([

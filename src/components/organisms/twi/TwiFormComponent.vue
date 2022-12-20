@@ -8,7 +8,7 @@ import { ref } from 'vue'
 const search = ref<TwiSearch>({
     twitterID: '',
     getTweetType: 'liked_tweets',
-    getNumberOfTweet: '100',
+    getNumberOfTweet: '10',
     isGetFromPreviousTweet: true,
 })
 
@@ -30,11 +30,17 @@ const inputValidation = (): string => {
     return error
 }
 
-//
+// APIから画像付きツイートを取得
+const tweetInfo = ref<any>()
 const apiManager = new ApiManager()
 const getTweet = async () => {
+    // 入力フォームのバリデーションを行いエラーがある場合は中断
+    errorMessage.value = inputValidation()
+    if (errorMessage.value !== '') return
+
     const response = await apiManager.get('tweetManager.php', search.value)
-    console.log(response.content)
+    console.log(response)
+    tweetInfo.value = response.content.tweetInfo
 }
 </script>
 <template>
@@ -118,5 +124,11 @@ const getTweet = async () => {
                 画像を取得
             </button>
         </dl>
+    </section>
+    <p>{{ errorMessage }}</p>
+    <section class="tweet-list">
+        <p v-for="tweet in tweetInfo" :key="tweet.postID">
+            {{ tweet }}
+        </p>
     </section>
 </template>

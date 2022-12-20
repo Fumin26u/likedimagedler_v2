@@ -117,7 +117,7 @@ class AccountController {
 
     // ユーザーIDを取得する
     public function getUserData() {
-        if ($_SERVER['HTTP_HOST'] === '') {
+        if ($_SERVER['HTTP_HOST'] === 'localhost') {
             $this->response['user_name'] = 'Fumiya0719';
             $this->response['content'] = 'ユーザーIDを取得しました。';
         } else {

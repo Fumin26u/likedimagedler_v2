@@ -51,7 +51,8 @@ const loginAccount = async () => {
     }
 
     // 返答でエラーが無い場合は指定ページにリダイレクト
-    router.push('./')
+    console.log(response)
+    // router.push('./')
 }
 </script>
 
