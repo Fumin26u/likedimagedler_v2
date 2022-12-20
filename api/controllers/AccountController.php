@@ -58,7 +58,7 @@ class AccountController {
             VALUES 
             (:email, :user_name, :password, 'N', 1, 0, 0, NOW(), NOW())
             SQL;
-            
+
             $st = $pdo->prepare($sql);
             $st->bindValue(':email', h($post['email']), PDO::PARAM_STR);
             $st->bindValue(':user_name', h($post['user_name']), PDO::PARAM_STR);
@@ -110,6 +110,23 @@ class AccountController {
             session_start();
             $_SESSION['user_name'] = h($post['user_name']);
             $this->response['content'] = 'ログイン認証が完了しました。';
+        }
+        return $this->response;
+    }
+
+    // ユーザーIDを取得する
+    public function getUserData() {
+        if ($_SERVER['HTTP_HOST'] === 'localhost') {
+            $this->response['user_name'] = 'Fumiya0719';
+            $this->response['content'] = 'ユーザーIDを取得しました。';
+        } else {
+            if (!isset($_SESSION['user_name']) || $_SESSION['user_name'] === '') {
+                $this->response['error'] = true;
+                $this->response['content'] = 'ユーザーIDの取得に失敗しました。';
+            } else {
+                $this->response['user_name'] = h($_SESSION['user_name']);
+                $this->response['content'] = 'ユーザーIDを取得しました。';
+            }
         }
         return $this->response;
     }

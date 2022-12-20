@@ -13,7 +13,11 @@
     > .header-nav {
         @include horizontalAlign();
     }
-    > .title-area {
+    > .title-area > a {
+        color: black;
+        &:hover {
+            text-decoration: none;
+        }
         > .caption {
             font-size: 14px;
         }
@@ -29,9 +33,15 @@
 }
 
 .header-container > .header-account > div {
-    > a {
+    > a,
+    p {
         @include horizontalAlign();
         margin-left: 1em;
+    }
+    > a {
         width: 120px;
+    }
+    > p {
+        font-size: 18px;
     }
 }

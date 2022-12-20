@@ -51,7 +51,7 @@ const registerAccount = async () => {
         return
     }
 
-    // 返答でエラーが無い場合は指定ページにリダイレクト    
+    // 返答でエラーが無い場合は指定ページにリダイレクト
     alert('アカウントを登録しました。')
     router.push('./login')
 }
