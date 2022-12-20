@@ -1,0 +1,225 @@
+/* 
+[記述ルール]
+入れ子構造は3段階まで。但し3段階目の関数やセレクタはこれに含めない。
+複数の関数・セレクタの入れ子はしない
+書く順序は直書き→セレクタ→関数→子要素
+レスポンシブは375px以上に対応
+*/
+
+/*--------------------
+
+    共通メディアクエリ・変数
+
+--------------------*/
+// メディアクエリの設定
+$mq-breakpoints: (
+    larger: 1560px,
+    large: 1280px,
+    medium: 1024px,
+    tablet: 768px,
+    small: 540px,
+    smaller: 375px,
+) !default;
+
+@mixin mediaQuery($breakpoint: md, $rule: min) {
+    $breakpoint: map_get($mq-breakpoints, $breakpoint);
+    @if $rule == max {
+        $breakpoint: $breakpoint - 0.0625;
+    }
+
+    @media screen and (#{$rule}-width: $breakpoint) {
+        @content;
+    }
+}
+
+// inline-blockでの横並び縦中央揃え設定
+@mixin horizontalAlign($vertical-align: middle) {
+    display: inline-block;
+    vertical-align: $vertical-align;
+}
+
+// flexboxでの横並び縦中央揃え設定
+@mixin horizontalAlignFlex($align-items: center) {
+    display: flex;
+    justify-content: space-between;
+    align-items: $align-items;
+}
+
+/*--------------------
+
+    共通パーツ
+
+--------------------*/
+.vue-app {
+    font-family: 'Yu Gothic Medium', '游ゴシック Medium', sans-serif;
+    padding: 0 0 1em;
+    margin: 0 12px;
+}
+header,
+main {
+    max-width: 1280px;
+    margin: 0 auto;
+    background-color: white;
+}
+
+button,
+input,
+textarea,
+select,
+label {
+    font-family: 'Yu Gothic Medium', '游ゴシック Medium', sans-serif;
+    @include horizontalAlign;
+}
+
+a {
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+em {
+    color: tomato;
+    font-style: normal;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0;
+}
+h1 {
+    font-size: 22px;
+}
+
+ul,
+p,
+dl {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    transform: scale(1.1);
+    margin: 0 4px;
+}
+
+button,
+input[type='submit'] {
+    cursor: pointer;
+}
+
+// カラー初期値
+$border-color: #888;
+$color-red: hsl(20, 100%, 32%);
+$color-green: hsl(110, 100%, 32%);
+$color-blue: hsl(200, 100%, 32%);
+
+$color-dark-red: hsl(20, 100%, 20%);
+$color-dark-green: hsl(110, 100%, 20%);
+$color-dark-blue: hsl(200, 100%, 20%);
+
+/*--------------------
+
+    共通ボタン
+
+--------------------*/
+.btn-common {
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 220px;
+    padding: 8px;
+    transition: 0.2s ease-in-out;
+    font-weight: bold;
+
+    color: hsl(0, 0%, 32%);
+    &.red { color: $color-red; }
+    &.green { color: $color-green; }
+    &.blue { color: $color-blue; }
+    
+    &::before,
+    &::after {
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        content: '';
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+
+        background: hsl(0, 0%, 16%);
+    }
+    &.red::before, &.red::after { background: $color-dark-red; }
+    &.green::before, &.green::after { background: $color-dark-green; }
+    &.blue::before, &.blue::after { background: $color-dark-blue; }
+
+    &::before {
+        top: 0;
+        left: 0;
+    }
+    &::after {
+        right: 0;
+        bottom: 0;
+    }
+
+    &:hover {
+        text-decoration: none;
+    }
+    &:hover::before,
+    &:hover::after {
+        width: 0;
+    }
+}
+/*--------------------
+
+    共通ボタン(小)
+
+--------------------*/
+.btn-small {
+    position: relative;
+    display: inline-block;
+    max-width: 160px;
+    text-align: center;
+    padding: 2px;
+    transition: all .2s ease-in-out;
+    font-weight: normal;
+
+    color: hsl(0, 0%, 32%);
+    &.red { color: $color-red; }
+    &.green { color: $color-green; }
+    &.blue { color: $color-blue; }
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        left: 0;
+        bottom: 0;
+        transition: all .2s;
+
+        background: hsl(0, 0%, 16%);
+    }
+    &.red::after { background: $color-dark-red; }
+    &.green::after { background: $color-dark-green; }
+    &.blue::after { background: $color-dark-blue; }
+
+    &:hover {
+        text-decoration: none;
+    }
+    &:hover::after {
+        width: 100%;
+    }
+}

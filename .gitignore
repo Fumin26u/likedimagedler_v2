@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/vendor
 
 
 # local env files
@@ -21,3 +22,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+system-conf.php
+commonlib.php
+GitHub Usage.md
+apiKey.php
