@@ -78,7 +78,7 @@ const getSelectedImagesFromTweets = (tweets: TweetInfo[]) => {
 const dlImage = async () => {
     // 選択した画像一覧の配列を作成
     const images = getSelectedImagesFromTweets(tweetInfo.value)
-    const response = apiManager.post('imageManager.php', {
+    const response = await apiManager.post('imageManager.php', {
         images: images
     })
     console.log(response)
