@@ -7,7 +7,7 @@ import { ref } from 'vue'
 // 入力フォームの値
 const search = ref<TwiSearch>({
     twitterID: '',
-    getTweetType: 'like',
+    getTweetType: 'liked_tweets',
     getNumberOfTweet: '100',
     isGetFromPreviousTweet: true,
 })
@@ -34,7 +34,7 @@ const inputValidation = (): string => {
 const apiManager = new ApiManager()
 const getTweet = async () => {
     const response = await apiManager.get('tweetManager.php', search.value)
-    console.log(response)
+    console.log(response.content)
 }
 </script>
 <template>
@@ -60,7 +60,7 @@ const getTweet = async () => {
                         <input
                             type="radio"
                             id="get-like"
-                            value="like"
+                            value="liked_tweets"
                             v-model="search.getTweetType"
                         />
                         <label for="get-like">いいね</label>
@@ -69,7 +69,7 @@ const getTweet = async () => {
                         <input
                             type="radio"
                             id="get-tweet"
-                            value="tweet"
+                            value="tweets"
                             v-model="search.getTweetType"
                         />
                         <label for="get-tweet">ツイート</label>
@@ -78,7 +78,7 @@ const getTweet = async () => {
                         <input
                             type="radio"
                             id="get-bookmark"
-                            value="bookmark"
+                            value="bookmarks"
                             v-model="search.getTweetType"
                             disabled
                         />

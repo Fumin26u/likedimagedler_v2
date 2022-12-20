@@ -32,5 +32,14 @@ $connection->setApiVersion('2');
 // スクリーンネームを数値IDに変換
 $endPoint = 'https://api.twitter.com/2/users/by/username/';
 $requestUrl = $endPoint . h($_GET['twitterID']);
+// TwitterAPIを叩いてユーザーの数値IDを取得
+$response = json_decode(curl_exec(setCurl($requestUrl)));
+$twitterUserID = $response->data->id;
 
-echo curl_exec(setCurl($requestUrl));
+// 画像ツイート一覧を取得
+$endPoint = "https://api.twitter.com/2/users/{$twitterUserID}/{$_GET['getTweetType']}";
+
+echo json_encode([
+    'twitterID' => $twitterUserID,
+    'endPoint' => $endPoint,
+], JSON_UNESCAPED_UNICODE);
