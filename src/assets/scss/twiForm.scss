@@ -40,8 +40,17 @@
 .tweet-list {
     @include horizontalAlignFlex;
     flex-wrap: wrap;
-    > h2 {
+    > .title-area, 
+    > .dl-image-area {
         width: 100%;
+        margin-bottom: 1em;
+        > * {
+            @include horizontalAlign(text-bottom);
+        }
+        > p {
+            font-size: 14px;
+            margin-left: 1em;
+        }
     }
 
     > .tweet-info {
@@ -52,7 +61,8 @@
             display: block;
             margin: 0;
         }
-        > .user-name {
+        > .user-name > * {
+            @include horizontalAlign;
             font-size: 18px;
         }
         > .tweet-text {

@@ -40,12 +40,17 @@ const getTweet = async () => {
 
     const response = await apiManager.get('tweetManager.php', search.value)
     console.log(response.content.tweetInfo)
-    tweetInfo.value = response.content.tweetInfo
+    tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
+        return {
+            ...tweet,
+            selected: true,
+        }
+    })
 }
 </script>
 <template>
     <section class="search-form">
-        <div class="title">
+        <div class="title-area">
             <h2>検索フォーム</h2>
         </div>
         <dl class="search-box">
@@ -127,9 +132,31 @@ const getTweet = async () => {
     </section>
     <p>{{ errorMessage }}</p>
     <section class="tweet-list" v-if="tweetInfo.length > 0">
-        <h2>取得ツイート一覧</h2>
+        <div class="title-area">
+            <h2>取得ツイート一覧</h2>
+            <p v-if="tweetInfo.length > 0" class="caption">
+                取得ツイート数: {{ tweetInfo.length }}
+            </p>
+        </div>
+        <div class="dl-image-area">
+            <button @click="dlTweet()" class="btn-common green">
+                ダウンロード
+            </button>
+            <p class="caption">※選択している画像をDLします。</p>
+        </div>
         <div v-for="tweet in tweetInfo" :key="tweet.postID" class="tweet-info">
-            <h3 class="user-name">{{ tweet.user }}</h3>
+            <div class="user-name">
+                <input
+                    type="checkbox"
+                    v-model="tweet.selected"
+                    :id="tweet.postID"
+                />
+                <h3>
+                    <label :for="tweet.postID">
+                        {{ tweet.user }}
+                    </label>
+                </h3>
+            </div>
             <p class="tweet-text">{{ tweet.text }}</p>
             <div
                 v-for="(image, index) in tweet.images"

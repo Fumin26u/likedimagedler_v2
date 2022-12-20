@@ -27,4 +27,5 @@ export interface TweetInfo {
     text: string
     images: string[]
     url: string
+    selected: boolean
 }
