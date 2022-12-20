@@ -25,7 +25,6 @@ const getUserInfo = async () => {
     const response = await apiManager.post('accountManager.php', {
         method: 'getUserData',
     })
-    console.log(response)
     return response.user_name
 }
 
@@ -40,7 +39,7 @@ onMounted(async () => {
     <header class="header-container">
         <div class="header-left">
             <div class="title-area">
-                <a href="./">
+                <a href="./#/">
                     <h1>ImageDLer</h1>
                     <p class="caption">Twitterの画像自動ダウンローダー</p>
                 </a>
@@ -53,13 +52,13 @@ onMounted(async () => {
         <div class="header-account">
             <div v-if="user_name !== ''">
                 <p>{{ user_name }}さん</p>
-                <a href="./login" class="btn-common blue" @click.prevent.stop="execLogout">
+                <a href="./#/login" class="btn-common blue" @click.prevent.stop="execLogout">
                     ログアウト
                 </a>
             </div>
             <div v-else>
-                <a href="./login" class="btn-common blue">ログイン</a>
-                <a href="./register" class="btn-common green">アカウント登録</a>
+                <a href="./#/login" class="btn-common blue">ログイン</a>
+                <a href="./#/register" class="btn-common green">アカウント登録</a>
             </div>
         </div>
     </header>

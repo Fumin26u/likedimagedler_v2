@@ -49,10 +49,10 @@ const loginAccount = async () => {
         errorMessage.value = response.content
         return
     }
+    console.log(response)
 
     // 返答でエラーが無い場合は指定ページにリダイレクト
-    console.log(response)
-    // router.push('./')
+    router.push('./')
 }
 </script>
 
@@ -97,7 +97,7 @@ const loginAccount = async () => {
                     </div>
                 </dl>
                 <button type="submit" class="btn-common green submit">
-                    登録
+                    ログイン
                 </button>
             </form>
         </div>
