@@ -13,7 +13,7 @@ import apiPath from '@/assets/ts/apiPath';
 const search = ref<TwiSearch>({
     twitterID: '',
     getTweetType: 'liked_tweets',
-    getNumberOfTweet: '10',
+    getNumberOfTweet: '100',
     isGetFromPreviousTweet: true,
 })
 
@@ -45,6 +45,7 @@ const getTweet = async () => {
 
     const response = await apiManager.get('tweetManager.php', search.value)
     // それぞれの画像にDL可否判定の値を追加
+    console.log(response)
     tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
         return {
             postID: tweet.postID,
@@ -61,7 +62,6 @@ const getTweet = async () => {
             }),
         }
     })
-    console.log(tweetInfo.value)
 }
 
 // 画像のダウンロード
@@ -79,11 +79,21 @@ const getSelectedImagesFromTweets = (tweets: TweetInfo[]) => {
 const dlImage = async () => {
     // 選択した画像一覧の配列を作成
     const images = getSelectedImagesFromTweets(tweetInfo.value)
-    const response = await apiManager.get('getSearchParams.php', {
+    // DLする画像一覧のURLクエリを取得
+    const uriResponse = await apiManager.get('getSearchParams.php', {
         images: images
     })
-    const searchParams = response.content.uri
+    const searchParams = uriResponse.content.uri
+    // APIのURLとクエリを結合してダウンロードページを開く
     window.open(`${apiPath}imageManager.php${searchParams}`)
+
+    // APIを叩いて保存回数と画像保存枚数、最新取得画像を更新
+    const imageInfoResponse = await apiManager.post('imageInfoManager.php', {
+        imageCount: images.length,
+        latestID: tweetInfo.value[0].postID,
+        twitterID: search.value.twitterID
+    })
+    console.log(imageInfoResponse)
 }
 </script>
 <template>

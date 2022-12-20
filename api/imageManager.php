@@ -2,6 +2,11 @@
 $home = './';
 require_once('./commonlib.php');
 
+// 非ログイン時強制終了
+if (isset($_SESSION['user_id']) && $_SESSION['user_id'] === '') {
+    exit;
+}
+
 use \ZipArchive as ZipArchive;
 
 // 拡張子の判別
@@ -41,9 +46,6 @@ function identifyExtension(string $file) {
 
 // DL時のファイル名
 $fileName = 'images.zip';
-$putFilePath = $_SERVER['HTTP_HOST'] === 'localhost' ?
-    'http://localhost/likedimagedler_v2/api/images/images.zip' :
-    './api/images/images.zip';
 // Formから送られた画像URL一覧
 $images = $_GET['images'];
 
@@ -95,9 +97,17 @@ unlink($fileName);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+<head>
+    <title>ImageDLer</title>
     <script lang="js">
         {
+            // DLが完了したらタブを閉じる
             window.close();
         }
     </script>
+</head>
+<body>
+    <p>ダウンロード処理中です。完了までしばらくお待ちください。</p>
+    <p>ダウンロード完了時自動で画面が閉じます。</p>
+</body>
 </html>
