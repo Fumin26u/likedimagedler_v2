@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import TwiImage from '../views/TwiImage.vue'
 import PixImage from '../views/PixImage.vue'
+import AccountRegister from '@/views/AccountRegister.vue'
+import AccountLogin from '@/views/AccountLogin.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -12,6 +14,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/pix',
         name: 'pix',
         component: PixImage,
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: AccountRegister,
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: AccountLogin,
     },
 ]
 

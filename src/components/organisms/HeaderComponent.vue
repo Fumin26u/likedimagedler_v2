@@ -22,8 +22,8 @@ const user_id = ref<string>('')
                 <a href="" class="btn-common blue">ログアウト</a>
             </div>
             <div v-else>
-                <a href="" class="btn-common blue">ログイン</a>
-                <a href="" class="btn-common green">アカウント登録</a>
+                <a href="./login" class="btn-common blue">ログイン</a>
+                <a href="./register" class="btn-common green">アカウント登録</a>
             </div>
         </div>
     </header>
