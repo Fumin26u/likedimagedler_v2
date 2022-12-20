@@ -62,6 +62,27 @@ const getTweet = async () => {
     })
     console.log(tweetInfo.value)
 }
+
+// 画像のダウンロード
+const getSelectedImagesFromTweets = (tweets: TweetInfo[]) => {
+    const images: string[] = []
+    tweets.map((tweet) => {
+        tweet.images.map((image) => {
+            if (image.selected) images.push(image.url)
+        })
+    })
+
+    return images
+}
+
+const dlImage = async () => {
+    // 選択した画像一覧の配列を作成
+    const images = getSelectedImagesFromTweets(tweetInfo.value)
+    const response = apiManager.post('imageManager.php', {
+        images: images
+    })
+    console.log(response)
+}
 </script>
 <template>
     <section class="search-form">
@@ -141,7 +162,7 @@ const getTweet = async () => {
                 </dd>
             </div>
             <button @click="getTweet()" class="btn-common green">
-                画像を取得
+                ツイートを取得
             </button>
         </dl>
     </section>
@@ -154,7 +175,7 @@ const getTweet = async () => {
             </p>
         </div>
         <div class="dl-image-area">
-            <button @click="dlTweet()" class="btn-common green">
+            <button @click="dlImage()" class="btn-common green">
                 ダウンロード
             </button>
             <p class="caption">※選択している画像をDLします。</p>
