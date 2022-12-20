@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import '@/assets/scss/twiForm.scss'
-import axios from '@/components/api/setApiKey'
+import ApiManager from '@/components/api/apiManager';
 import { TwiSearch } from '@/assets/interfaces/interfaces'
 import { ref } from 'vue'
 
@@ -25,16 +25,18 @@ const inputValidation = (): string => {
         error = '取得ツイート数は数値で入力してください。'
     }
     if (numTweet < 10 || 300 < numTweet) {
-        error =  '取得できるツイートの最小値は10, 最大値は300です。'
+        error = '取得できるツイートの最小値は10, 最大値は300です。'
     }
     return error
 }
 
-// 
+//
+const apiManager = new ApiManager()
 const getTweet = () => {
-
+    const response = apiManager.get('tweetManager.php', search.value)
+    console.log(response)
 }
-</script> 
+</script>
 <template>
     <section class="search-form">
         <div class="title">
@@ -112,7 +114,9 @@ const getTweet = () => {
                     <label for="get-pre">前回DLした画像以降を取得</label>
                 </dd>
             </div>
-            <button @click="getTweet" class="btn-common green">画像を取得</button>
+            <button @click="getTweet()" class="btn-common green">
+                画像を取得
+            </button>
         </dl>
     </section>
 </template>
