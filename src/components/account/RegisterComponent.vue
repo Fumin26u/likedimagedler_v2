@@ -60,7 +60,57 @@ const registerAccount = async () => {
 
 <template>
     <HeaderComponent />
-    <main>
-        <div>This is RegisterComponent</div>
+    <main class="main-container register-component">
+        <div class="title-area">
+            <h2>ユーザー新規登録</h2>
+            <p>{{ errorMessage }}</p>
+        </div>
+        <div class="form-area">
+            <a href="./#/login">既にアカウント登録している場合はこちら</a>
+            <form @submit.prevent="registerAccount()">
+                <dl>
+                    <div>
+                        <dt>メールアドレス</dt>
+                        <dd>
+                            <input
+                                type="email"
+                                id="email"
+                                v-model="account.email"
+                                required
+                            />
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>ユーザーID</dt>
+                        <dd>
+                            <p class="caption">6文字以上20文字以下</p>
+                            <input
+                                type="text"
+                                id="user_id"
+                                v-model="account.user_id"
+                                autocomplete="username"
+                                :pattern="regex.user_id"
+                                required
+                            />
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>パスワード</dt>
+                        <dd>
+                            <p class="caption">半角英数字8文字以上20文字以下</p>
+                            <input
+                                type="password"
+                                id="password"
+                                v-model="account.password"
+                                autocomplete="current-password"
+                                :pattern="regex.password"
+                                required
+                            />
+                        </dd>
+                    </div>
+                </dl>
+                <button type="submit" class="btn-common green submit">登録</button>
+            </form>
+        </div>
     </main>
 </template>

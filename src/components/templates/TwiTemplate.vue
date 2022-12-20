@@ -5,7 +5,7 @@ import TwiFormComponent from '../organisms/twi/TwiFormComponent.vue';
 
 <template>
     <HeaderComponent />
-    <main class="main-container">
+    <main class="main-container twi-template">
         <TwiFormComponent />
     </main>
 </template>
