@@ -7,6 +7,7 @@ import {
     TweetImage,
 } from '@/assets/interfaces/interfaces'
 import { ref } from 'vue'
+import apiPath from '@/assets/ts/apiPath';
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
@@ -78,10 +79,11 @@ const getSelectedImagesFromTweets = (tweets: TweetInfo[]) => {
 const dlImage = async () => {
     // 選択した画像一覧の配列を作成
     const images = getSelectedImagesFromTweets(tweetInfo.value)
-    const response = await apiManager.post('imageManager.php', {
+    const response = await apiManager.get('getSearchParams.php', {
         images: images
     })
-    console.log(response)
+    const searchParams = response.content.uri
+    window.open(`${apiPath}imageManager.php${searchParams}`)
 }
 </script>
 <template>
