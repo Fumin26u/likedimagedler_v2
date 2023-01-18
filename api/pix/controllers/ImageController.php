@@ -47,8 +47,18 @@ class ImageController {
     // URLから画像をDLして圧縮
     public function download($urls, $zipFileName, $imagesDirPath) {
         // URL一覧からクエリを生成し画像をDL
-        $query = h(implode(',', $urls));
-        $result = $this->downloadImages($query);
+        $queue = [];
+        for ($i = 0; $i < count($urls); $i++) {
+            $queue[] = $urls[$i];
+            // 20枚ごとにurlを分割してdlを行う(リンク数が多いと正常にDLできない為)
+            if ($i % 20 === 0 || $i === count($urls) - 1) {
+                $query = h(implode(',', $queue));
+                $result = $this->downloadImages($query);
+                if ($result->error) break;
+
+                $queue = [];
+            }
+        } 
 
         $response = [
             'isSuccessDownload' => true,

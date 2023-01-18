@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PixTemplate from '@/components/templates/PixTemplate.vue';
+import PixTemplate from '@/components/templates/PixTemplate.vue'
 </script>
 
 <template>

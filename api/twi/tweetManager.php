@@ -10,7 +10,6 @@ function setCurl($req) {
     $bearer_token = BEARER_TOKEN;
 
     // リクエストヘッダの作成
-    // bearer_token = AAAAAAAAAAAAAAAAAAAAAOpSVQEAAAAAWm06h4FQ1PfoTE3W6%2BQKcW%2FZ8hQ%3DgnU5SiqUcTIruBchash5z90BNn9vT5Jvxn0X5BurdAIrdGPoeQ (it must be remove)
     $header = [
         'Authorization: Bearer ' . $bearer_token,
         'Content-Type: application/json',

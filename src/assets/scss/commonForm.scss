@@ -52,6 +52,7 @@
 .post-list {
     @include horizontalAlignFlex;
     flex-wrap: wrap;
+    position: relative;
     > .title-area,
     > .dl-image-area {
         width: 100%;
@@ -63,9 +64,6 @@
             font-size: 14px;
             margin-left: 1em;
         }
-    }
-    > .dl-image-area > .button-area {
-        position: relative;
     }
 
     > .post-info {

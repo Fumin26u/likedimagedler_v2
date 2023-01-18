@@ -26,4 +26,4 @@ system-conf.php
 commonlib.php
 GitHub Usage.md
 apiKey.php
-api/images
+api/*/images

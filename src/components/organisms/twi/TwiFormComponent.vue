@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from '@nuxtjs/composition-api'
+import { ref } from 'vue'
 import '@/assets/scss/organisms/twiForm.scss'
 import ApiManager from '@/components/api/apiManager'
 import {
@@ -7,7 +7,7 @@ import {
     TweetInfo,
     TweetImage,
 } from '@/assets/interfaces/interfaces'
-import apiPath from '~/assets/ts/apiPath'
+import apiPath from '@/assets/ts/apiPath'
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
@@ -190,6 +190,7 @@ const dlImage = async () => {
         </section>
         <p>{{ errorMessage }}</p>
         <section v-if="tweetInfo.length > 0" class="tweet-list post-list">
+            <div v-show="isLoadImages" class="btn-cover"></div>
             <div class="title-area">
                 <h2>取得ツイート一覧</h2>
                 <p v-if="tweetInfo.length > 0" class="caption">
@@ -197,12 +198,9 @@ const dlImage = async () => {
                 </p>
             </div>
             <div class="dl-image-area">
-                <div class="button-area">
-                    <div v-show="isLoadImages" class="btn-cover"></div>
-                    <button class="btn-common green" @click="dlImage()">
-                        ダウンロード
-                    </button>
-                </div>
+                <button class="btn-common green" @click="dlImage()">
+                    ダウンロード
+                </button>
                 <p class="caption">※選択している画像をDLします。</p>
             </div>
             <div

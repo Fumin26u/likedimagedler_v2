@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, useRouter } from '@nuxtjs/composition-api'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import '@/assets/scss/organisms/header.scss'
 import ApiManager from '@/components/api/apiManager'
-import apiPath from '~/assets/ts/apiPath';
+import apiPath from '@/assets/ts/apiPath'
 
 interface Emits {
     (e: 'getUserInfo', userId: string): string
@@ -25,7 +26,6 @@ const getUserInfo = async () => {
     const response = await apiManager.post(apiPath + 'accountManager.php', {
         method: 'getUserData',
     })
-    console.log(response)
     return response.user_name
 }
 
@@ -48,7 +48,7 @@ onMounted(async () => {
             <nav class="header-nav">
                 <a href="" class="btn-small blue">注意事項</a>
                 <a href="" class="btn-small blue">更新履歴</a>
-                <a href="./pix" class="btn-small blue">pixiv版</a>
+                <a href="./#/pix" class="btn-small blue">pixiv版</a>
             </nav>
         </div>
         <div class="header-account">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from '@nuxtjs/composition-api'
+import { ref } from 'vue'
 import '@/assets/scss/organisms/pixForm.scss'
 import ApiManager from '@/components/api/apiManager'
 import {
@@ -7,7 +7,7 @@ import {
     PixPostInfo,
     PixPostImage,
 } from '@/assets/interfaces/interfaces'
-import apiPath from '~/assets/ts/apiPath'
+import apiPath from '@/assets/ts/apiPath'
 
 // 入力フォームの値
 const search = ref<PixSearch>({
@@ -16,7 +16,7 @@ const search = ref<PixSearch>({
     getNumberOfPost: '10',
     isGetFromPreviousPost: true,
     includeTags: false,
-    suspendID: ''
+    suspendID: '',
 })
 
 const errorMessage = ref<string>('')
@@ -46,12 +46,13 @@ const getImage = async () => {
     errorMessage.value = inputValidation()
     if (errorMessage.value !== '') return
 
-    const response = await apiManager.post(apiPath + 'pix/pixImageManager.php', {
-        method: 'get',
-        content: search.value,
-    })
-    console.log(response)
-    // return
+    const response = await apiManager.post(
+        apiPath + 'pix/pixImageManager.php',
+        {
+            method: 'get',
+            content: search.value,
+        }
+    )
 
     pixPostInfo.value = response.map((post: PixPostInfo) => {
         return {
@@ -91,10 +92,13 @@ const dlImage = async () => {
     const imagePaths = getSelectedImagesFromPosts(pixPostInfo.value)
 
     // 画像URL一覧をAPIに送り画像をDL
-    const downloadResponse = await apiManager.post(apiPath + 'pix/pixImageManager.php', {
-        method: 'download',
-        content: imagePaths,
-    })
+    const downloadResponse = await apiManager.post(
+        apiPath + 'pix/pixImageManager.php',
+        {
+            method: 'download',
+            content: imagePaths,
+        }
+    )
 
     // 画像のDLとzipファイルの作成に成功した場合、zipをDLする
     if (!downloadResponse.isSuccessDownload) {
@@ -116,7 +120,7 @@ const dlImage = async () => {
                 imageCount: imagePaths.length,
                 latestID: pixPostInfo.value[0].postID,
                 pixUserID: search.value.userID,
-            }
+            },
         }
     )
     // zipファイルと画像ディレクトリを一括消去
@@ -228,6 +232,7 @@ const dlImage = async () => {
         </section>
         <p>{{ errorMessage }}</p>
         <section v-if="pixPostInfo.length > 0" class="post-list">
+            <div v-show="isLoadImages" class="btn-cover"></div>
             <div class="title-area">
                 <h2>取得投稿一覧</h2>
                 <p v-if="pixPostInfo.length > 0" class="caption">
@@ -235,12 +240,9 @@ const dlImage = async () => {
                 </p>
             </div>
             <div class="dl-image-area">
-                <div class="button-area">
-                    <div v-show="isLoadImages" class="btn-cover"></div>
-                    <button class="btn-common green" @click="dlImage()">
-                        ダウンロード
-                    </button>
-                </div>
+                <button class="btn-common green" @click="dlImage()">
+                    ダウンロード
+                </button>
                 <p class="caption">※選択している画像をDLします。</p>
             </div>
             <div

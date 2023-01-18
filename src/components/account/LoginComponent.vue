@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, useRouter } from '@nuxtjs/composition-api'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import HeaderComponent from '../organisms/HeaderComponent.vue'
 import ApiManager from '@/components/api/apiManager'
-import apiPath from '~/assets/ts/apiPath'
+import apiPath from '@/assets/ts/apiPath'
 import { Login } from '@/assets/interfaces/interfaces'
 import '@/assets/scss/accountManager.scss'
 
@@ -42,7 +43,10 @@ const loginAccount = async () => {
     if (errorMessage.value !== '') return
 
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
-    const response = await apiManager.post(apiPath + 'accountManager.php', account.value)
+    const response = await apiManager.post(
+        apiPath + 'accountManager.php',
+        account.value
+    )
 
     // 入力内容が不正の場合
     if (response.error) {

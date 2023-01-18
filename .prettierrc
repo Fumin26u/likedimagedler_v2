@@ -3,5 +3,6 @@
     "arrowParens": "always",
     "tabWidth": 4,
     "singleQuote": true,
-    "htmlWhitespaceSensitivity": "ignore"
+    "htmlWhitespaceSensitivity": "ignore",
+    "endOfLine": "lf"
 }
