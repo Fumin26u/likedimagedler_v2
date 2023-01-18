@@ -3,12 +3,12 @@ from time import sleep
 # pixivpy: pixivからデータを抽出するAPI
 from pixivpy3 import *
 # import APIkey
-import apiKey
+import config
 
 TAG_LIST = [
     'オリジナル',
     'アイドルマスターミリオンライブ!',
-    'アイドルマスターシャイニーカラーズ',
+    # 'アイドルマスターシャイニーカラーズ',
     'ご注文はうさぎですか?',
     'アズールレーン',
     'ブルーアーカイブ',
@@ -24,7 +24,7 @@ EX_TAG_LIST = [
 
 # Auth接続
 aapi = AppPixivAPI()
-aapi.auth(refresh_token = apiKey.REFRESH_TOKEN)
+aapi.auth(refresh_token = config.REFRESH_TOKEN)
 
 # 画像の取得先設定(ブックマークor作品)
 def getImagesInfo(id: int, postType: str):

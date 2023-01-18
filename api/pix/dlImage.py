@@ -2,7 +2,7 @@ import sys, json, os, random, string, time
 # pixivpy: pixivからデータを抽出するAPI
 from pixivpy3 import *
 # import APIkey
-import apiKey
+import config
 
 illusts = sys.argv[1].split(',')
 GET_QUERY = dict()
@@ -11,7 +11,7 @@ for index, illust in enumerate(illusts):
 
 # Auth接続
 aapi = AppPixivAPI()
-aapi.auth(refresh_token = apiKey.REFRESH_TOKEN)
+aapi.auth(refresh_token = config.REFRESH_TOKEN)
 
 # ランダム文字列の生成
 def generateRandomString(strLength: int) -> str:
