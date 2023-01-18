@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: PUT_YOUR_APPLICATION_URL_HERE");
-header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');   
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
 // ClickJacking対策
 header('X-FRAME-OPTIONS: SAMEORIGIN');

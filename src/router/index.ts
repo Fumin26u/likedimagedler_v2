@@ -1,34 +1,34 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import TwiImage from '../views/TwiImage.vue'
-import PixImage from '../views/PixImage.vue'
-import AccountRegister from '@/views/AccountRegister.vue'
-import AccountLogin from '@/views/AccountLogin.vue'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import index from '../views/index.vue'
+import pix from '../views/pix.vue'
+import register from '@/views/register.vue'
+import login from '@/views/login.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'twi',
-        component: TwiImage,
+        component: index,
     },
     {
         path: '/pix',
         name: 'pix',
-        component: PixImage,
+        component: pix,
     },
     {
         path: '/register',
         name: 'register',
-        component: AccountRegister,
+        component: register,
     },
     {
         path: '/login',
         name: 'login',
-        component: AccountLogin,
+        component: login,
     },
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHashHistory(process.env.BASE_URL),
     routes,
 })
 

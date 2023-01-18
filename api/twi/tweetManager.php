@@ -1,8 +1,8 @@
 <?php
-$home = './';
+$home = '../';
 
-require_once './commonlib.php';
-require_once '../vendor/autoload.php';
+require_once $home . '../vendor/autoload.php';
+require_once $home . 'commonlib.php';
 require_once './apiKey.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
 
@@ -27,22 +27,24 @@ function setCurl($req) {
 // 前回DLした画像以降を取得がtrueの場合DBから該当IDを取得
 $latestDL = '';
 $userID = $_SERVER['HTTP_HOST'] === 'localhost' ? 2 : (int) h($_SESSION['user_id']);
-try {
-    $pdo = dbConnect();
-    
-    // latest_dlテーブルの確認
-    $st = $pdo->prepare('SELECT post_id FROM latest_dl WHERE user_id = :user_id AND twi_id = :twi_id');
-    $st->bindValue(':user_id', $userID, PDO::PARAM_INT);
-    $st->bindValue(':twi_id', h($_GET['twitterID']), PDO::PARAM_STR);
-    $st->execute();
-    $row = $st->fetch(PDO::FETCH_ASSOC);
-    
-    $pdo = null;
-    // latest_dlテーブルに前回保存した画像の投稿IDがある場合、変数に挿入
-    $latestDL = $row !== false ? $row['post_id'] : '';
-} catch (PDOException $e) {
-    echo 'データベース接続に失敗しました。';
-    if (DEBUG) echo $e;
+if ($_GET['isGetFromPreviousTweet'] === 'true') {
+    try {
+        $pdo = dbConnect();
+
+        // latest_dlテーブルの確認
+        $st = $pdo->prepare('SELECT post_id FROM latest_dl WHERE user_id = :user_id AND twi_id = :twi_id');
+        $st->bindValue(':user_id', $userID, PDO::PARAM_INT);
+        $st->bindValue(':twi_id', h($_GET['twitterID']), PDO::PARAM_STR);
+        $st->execute();
+        $row = $st->fetch(PDO::FETCH_ASSOC);
+
+        $pdo = null;
+        // latest_dlテーブルに前回保存した画像の投稿IDがある場合、変数に挿入
+        $latestDL = $row !== false ? $row['post_id'] : '';
+    } catch (PDOException $e) {
+        echo 'データベース接続に失敗しました。';
+        if (DEBUG) echo $e;
+    }
 }
 
 
@@ -75,7 +77,7 @@ $tweetList = [];
 
 while ($getTweetCount > 0) {
     $getTweetCount -= $getTweetCountOnce;
-    
+
     // TwitterAPIに送るパラメータクエリ
     $query = [
         'max_results' => $getTweetCountOnce,
@@ -110,11 +112,11 @@ while ($getTweetCount > 0) {
     $tweetMedias = [];
     foreach($tweetListQueue['includes']['media'] as $media) {
         if (isset($media['url']) || isset($media['preview_image_url'])) {
-            $tweetMedias[$media['media_key']] = 
-                $media['type'] === 'photo' ? 
+            $tweetMedias[$media['media_key']] =
+                $media['type'] === 'photo' ?
                 $media['url'] : $media['preview_image_url'];
         }
-    } 
+    }
 
     // ツイート情報を整形して一覧に挿入
     foreach ($tweetListQueue['data'] as $tweet) {
@@ -141,7 +143,7 @@ while ($getTweetCount > 0) {
         $tweetCounter++;
     }
 
-    $paginationToken = $tweetListQueue['meta']['next_token'];
+    $paginationToken = isset($tweetListQueue['meta']['next_token']) ? $tweetListQueue['meta']['next_token'] : '';
 }
 
 echo json_encode([

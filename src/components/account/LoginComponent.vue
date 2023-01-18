@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import HeaderComponent from '../organisms/HeaderComponent.vue'
-import apiPath from '@/assets/ts/apiPath'
 import ApiManager from '@/components/api/apiManager'
+import apiPath from '@/assets/ts/apiPath'
 import { Login } from '@/assets/interfaces/interfaces'
 import '@/assets/scss/accountManager.scss'
-import { ref } from 'vue'
-import router from '@/router'
 
 // フォーム入力内容
 const account = ref<Login>({
@@ -35,6 +35,7 @@ const inputValidation = () => {
 }
 
 // アカウント登録
+const router = useRouter()
 const apiManager = new ApiManager()
 const loginAccount = async () => {
     // 入力内容がパターンにマッチしない場合エラーメッセージを出力
@@ -42,7 +43,10 @@ const loginAccount = async () => {
     if (errorMessage.value !== '') return
 
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
-    const response = await apiManager.post('accountManager.php', account.value)
+    const response = await apiManager.post(
+        apiPath + 'accountManager.php',
+        account.value
+    )
 
     // 入力内容が不正の場合
     if (response.error) {
@@ -51,55 +55,58 @@ const loginAccount = async () => {
     }
 
     // 返答でエラーが無い場合は指定ページにリダイレクト
-    console.log(response)
-    // router.push('./')
+    router.push('./')
 }
 </script>
 
 <template>
-    <HeaderComponent />
-    <main class="main-container login-component">
-        <div class="title-area">
-            <h2>ユーザー新規登録</h2>
-            <p>{{ errorMessage }}</p>
-        </div>
-        <div class="form-area">
-            <a href="./#/register">アカウント未登録の場合はこちら</a>
-            <form @submit.prevent="loginAccount()">
-                <dl>
-                    <div>
-                        <dt>ユーザー名</dt>
-                        <dd>
-                            <p class="caption">6文字以上20文字以下</p>
-                            <input
-                                type="text"
-                                id="user_name"
-                                v-model="account.user_name"
-                                autocomplete="username"
-                                :pattern="regex.user_name"
-                                required
-                            />
-                        </dd>
-                    </div>
-                    <div>
-                        <dt>パスワード</dt>
-                        <dd>
-                            <p class="caption">半角英数字8文字以上20文字以下</p>
-                            <input
-                                type="password"
-                                id="password"
-                                v-model="account.password"
-                                autocomplete="current-password"
-                                :pattern="regex.password"
-                                required
-                            />
-                        </dd>
-                    </div>
-                </dl>
-                <button type="submit" class="btn-common green submit">
-                    登録
-                </button>
-            </form>
-        </div>
-    </main>
+    <div>
+        <HeaderComponent />
+        <main class="main-container login-component">
+            <div class="title-area">
+                <h2>ユーザー新規登録</h2>
+                <p>{{ errorMessage }}</p>
+            </div>
+            <div class="form-area">
+                <a href="./#/register">アカウント未登録の場合はこちら</a>
+                <form @submit.prevent="loginAccount()">
+                    <dl>
+                        <div>
+                            <dt>ユーザー名</dt>
+                            <dd>
+                                <p class="caption">6文字以上20文字以下</p>
+                                <input
+                                    id="user_name"
+                                    v-model="account.user_name"
+                                    type="text"
+                                    autocomplete="username"
+                                    :pattern="regex.user_name"
+                                    required
+                                />
+                            </dd>
+                        </div>
+                        <div>
+                            <dt>パスワード</dt>
+                            <dd>
+                                <p class="caption">
+                                    半角英数字8文字以上20文字以下
+                                </p>
+                                <input
+                                    id="password"
+                                    v-model="account.password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    :pattern="regex.password"
+                                    required
+                                />
+                            </dd>
+                        </div>
+                    </dl>
+                    <button type="submit" class="btn-common green submit">
+                        ログイン
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
 </template>

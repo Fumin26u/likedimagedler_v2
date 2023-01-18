@@ -1,0 +1,21 @@
+@import '../commonForm.scss';
+.post-list {
+    > .post-info {
+        > .pix-post-text {
+            height: 26px;
+            overflow-y: auto;
+            border-bottom: 1px dashed $border-color;
+        }
+
+        > .pix-post-image {
+            display: block;
+            height: 54px;
+            overflow-y: auto;
+        }
+        > .pix-post-image input,
+        > .pix-post-image label {
+            @include horizontalAlign();
+            cursor: pointer;
+        }
+    }
+}

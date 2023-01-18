@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import HeaderComponent from '../organisms/HeaderComponent.vue';
-import TwiFormComponent from '../organisms/twi/TwiFormComponent.vue';
+import HeaderComponent from '@/components/organisms/HeaderComponent.vue'
+import TwiFormComponent from '@/components/organisms/twi/TwiFormComponent.vue'
 </script>
 
 <template>
-    <HeaderComponent />
-    <main class="main-container twi-template">
+    <div>
+        <HeaderComponent />
         <TwiFormComponent />
-    </main>
+    </div>
 </template>

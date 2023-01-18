@@ -4,5 +4,4 @@ import RegisterComponent from '@/components/account/RegisterComponent.vue'
 
 <template>
     <RegisterComponent />
-    <div></div>
 </template>
