@@ -1,4 +1,4 @@
-/* 
+/*
 [記述ルール]
 入れ子構造は3段階まで。但し3段階目の関数やセレクタはこれに含めない。
 複数の関数・セレクタの入れ子はしない
@@ -50,7 +50,7 @@ $mq-breakpoints: (
     共通パーツ
 
 --------------------*/
-.vue-app {
+body {
     font-family: 'Yu Gothic Medium', '游ゴシック Medium', sans-serif;
     padding: 0 0 1em;
     margin: 0 12px;
@@ -137,7 +137,7 @@ $color-dark-blue: hsl(200, 100%, 20%);
     outline: none;
     background-color: white;
     font-size: 16px;
-    
+
     position: relative;
     display: flex;
     justify-content: space-around;
@@ -150,10 +150,16 @@ $color-dark-blue: hsl(200, 100%, 20%);
     font-weight: bold;
 
     color: hsl(0, 0%, 32%);
-    &.red { color: $color-red; }
-    &.green { color: $color-green; }
-    &.blue { color: $color-blue; }
-    
+    &.red {
+        color: $color-red;
+    }
+    &.green {
+        color: $color-green;
+    }
+    &.blue {
+        color: $color-blue;
+    }
+
     &::before,
     &::after {
         position: absolute;
@@ -165,9 +171,18 @@ $color-dark-blue: hsl(200, 100%, 20%);
 
         background: hsl(0, 0%, 16%);
     }
-    &.red::before, &.red::after { background: $color-dark-red; }
-    &.green::before, &.green::after { background: $color-dark-green; }
-    &.blue::before, &.blue::after { background: $color-dark-blue; }
+    &.red::before,
+    &.red::after {
+        background: $color-dark-red;
+    }
+    &.green::before,
+    &.green::after {
+        background: $color-dark-green;
+    }
+    &.blue::before,
+    &.blue::after {
+        background: $color-dark-blue;
+    }
 
     &::before {
         top: 0;
@@ -197,13 +212,19 @@ $color-dark-blue: hsl(200, 100%, 20%);
     max-width: 160px;
     text-align: center;
     padding: 2px;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     font-weight: normal;
 
     color: hsl(0, 0%, 32%);
-    &.red { color: $color-red; }
-    &.green { color: $color-green; }
-    &.blue { color: $color-blue; }
+    &.red {
+        color: $color-red;
+    }
+    &.green {
+        color: $color-green;
+    }
+    &.blue {
+        color: $color-blue;
+    }
 
     &::after {
         content: '';
@@ -212,13 +233,19 @@ $color-dark-blue: hsl(200, 100%, 20%);
         height: 2px;
         left: 0;
         bottom: 0;
-        transition: all .2s;
+        transition: all 0.2s;
 
         background: hsl(0, 0%, 16%);
     }
-    &.red::after { background: $color-dark-red; }
-    &.green::after { background: $color-dark-green; }
-    &.blue::after { background: $color-dark-blue; }
+    &.red::after {
+        background: $color-dark-red;
+    }
+    &.green::after {
+        background: $color-dark-green;
+    }
+    &.blue::after {
+        background: $color-dark-blue;
+    }
 
     &:hover {
         text-decoration: none;

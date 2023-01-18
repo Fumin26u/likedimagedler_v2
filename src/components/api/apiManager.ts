@@ -1,5 +1,4 @@
 import axios from 'axios'
-import apiPath from '@/assets/ts/apiPath'
 
 class ApiManager {
     // POST
@@ -7,9 +6,8 @@ class ApiManager {
         url: string,
         formData: any = {}
     ): Promise<{ [key: string]: any }> {
-        const formUrl = apiPath + url
         return await axios
-            .post(formUrl, formData)
+            .post(url, formData)
             .then((response) => {
                 return response.data
             })
@@ -23,10 +21,8 @@ class ApiManager {
 
     // GET
     async get(url: string, query: any = {}) {
-        const formUrl = apiPath + url
-
         return await axios
-            .get(formUrl, {
+            .get(url, {
                 params: query,
             })
             .then((response) => {

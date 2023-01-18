@@ -13,6 +13,7 @@ export interface Login {
     password: string
 }
 
+// Twitter関連
 export interface TwiSearch {
     twitterID: string
     getTweetType: 'liked_tweets' | 'tweets' | 'bookmarks'
@@ -33,4 +34,29 @@ export interface TweetInfo {
     text: string
     images: TweetImage[]
     url: string
+}
+
+// pixiv関連
+export interface PixSearch {
+    userID: number
+    getPostType: string
+    getNumberOfPost: string
+    isGetFromPreviousPost: boolean
+    includeTags: boolean
+    suspendID: string
+}
+
+export interface PixPostInfo {
+    postID: string
+    post_time: boolean
+    user: string
+    text: string
+    images: TweetImage[]
+    url: string
+}
+
+export interface PixPostImage {
+    id: string
+    url: string
+    selected: boolean
 }

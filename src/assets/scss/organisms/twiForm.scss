@@ -1,0 +1,32 @@
+@import '../commonForm.scss';
+.post-list {
+    > .post-info {
+        > .tweet-text {
+            height: 52px;
+            overflow-y: auto;
+        }
+
+        > .tweet-image {
+            @include horizontalAlign;
+            max-width: 160px;
+        }
+        > .tweet-image > input {
+            display: none;
+        }
+        > .tweet-image > label {
+            cursor: pointer;
+            height: 160px;
+            &:hover, &.not-selected {
+                opacity: 0.5;
+            }
+            &:hover {
+                transition: all .2s;
+            }
+        }
+        > .tweet-image img {
+            max-width: 160px;
+            max-height: 100%;
+            object-fit: cover;
+        }
+    }
+}

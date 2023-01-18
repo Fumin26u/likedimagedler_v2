@@ -1,0 +1,47 @@
+@import '../style.scss';
+
+.header-container {
+    @include horizontalAlignFlex();
+    padding: 0 16px;
+    border-bottom: 1px dashed $border-color;
+    box-shadow: 0 2px 4px #888;
+}
+
+.header-container > .header-left {
+    width: 60%;
+    > .title-area,
+    > .header-nav {
+        @include horizontalAlign();
+    }
+    > .title-area > a {
+        color: black;
+        &:hover {
+            text-decoration: none;
+        }
+        > .caption {
+            font-size: 14px;
+        }
+    }
+    > .header-nav {
+        margin-left: 1em;
+        > a {
+            @include horizontalAlign();
+            margin: 0 16px;
+            font-size: 18px;
+        }
+    }
+}
+
+.header-container > .header-account > div {
+    > a,
+    p {
+        @include horizontalAlign();
+        margin-left: 1em;
+    }
+    > a {
+        width: 120px;
+    }
+    > p {
+        font-size: 18px;
+    }
+}

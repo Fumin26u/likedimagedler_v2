@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import '@/assets/scss/twiForm.scss'
+import { ref } from '@nuxtjs/composition-api'
+import '@/assets/scss/organisms/twiForm.scss'
 import ApiManager from '@/components/api/apiManager'
 import {
     TwiSearch,
     TweetInfo,
     TweetImage,
 } from '@/assets/interfaces/interfaces'
-import { ref } from 'vue'
-import apiPath from '@/assets/ts/apiPath';
+import apiPath from '~/assets/ts/apiPath'
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
-    twitterID: '',
+    twitterID: 'fumin_ci',
     getTweetType: 'liked_tweets',
     getNumberOfTweet: '100',
     isGetFromPreviousTweet: true,
@@ -29,7 +29,7 @@ const inputValidation = (): string => {
     if (isNaN(numTweet)) {
         error = '取得ツイート数は数値で入力してください。'
     }
-    if (numTweet < 10 || 300 < numTweet) {
+    if (numTweet < 10 || numTweet > 300) {
         error = '取得できるツイートの最小値は10, 最大値は300です。'
     }
     return error
@@ -38,14 +38,17 @@ const inputValidation = (): string => {
 // APIから画像付きツイートを取得
 const tweetInfo = ref<TweetInfo[]>([])
 const apiManager = new ApiManager()
+const isLoadImages = ref<boolean>(false)
 const getTweet = async () => {
+    isLoadImages.value = true
     // 入力フォームのバリデーションを行いエラーがある場合は中断
     errorMessage.value = inputValidation()
     if (errorMessage.value !== '') return
 
-    const response = await apiManager.get('tweetManager.php', search.value)
-    // それぞれの画像にDL可否判定の値を追加
+    const url = apiPath + 'twi/tweetManager.php'
+    const response = await apiManager.get(url, search.value)
     console.log(response)
+    // それぞれの画像にDL可否判定の値を追加
     tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
         return {
             postID: tweet.postID,
@@ -62,6 +65,7 @@ const getTweet = async () => {
             }),
         }
     })
+    isLoadImages.value = false
 }
 
 // 画像のダウンロード
@@ -77,145 +81,159 @@ const getSelectedImagesFromTweets = (tweets: TweetInfo[]) => {
 }
 
 const dlImage = async () => {
+    isLoadImages.value = true
     // 選択した画像一覧の配列を作成
-    const images = getSelectedImagesFromTweets(tweetInfo.value)
+    const imagePaths = getSelectedImagesFromTweets(tweetInfo.value)
     // DLする画像一覧のURLクエリを取得
-    const uriResponse = await apiManager.get('getSearchParams.php', {
-        images: images
-    })
+    const uriResponse = await apiManager.get(
+        apiPath + 'twi/getSearchParams.php',
+        {
+            images: imagePaths,
+        }
+    )
     const searchParams = uriResponse.content.uri
     // APIのURLとクエリを結合してダウンロードページを開く
-    window.open(`${apiPath}imageManager.php${searchParams}`)
+    window.open(`${apiPath}twi/imageManager.php${searchParams}`)
 
     // APIを叩いて保存回数と画像保存枚数、最新取得画像を更新
-    const imageInfoResponse = await apiManager.post('imageInfoManager.php', {
-        imageCount: images.length,
+    await apiManager.post(apiPath + 'twi/imageInfoManager.php', {
+        imageCount: imagePaths.length,
         latestID: tweetInfo.value[0].postID,
-        twitterID: search.value.twitterID
+        twitterID: search.value.twitterID,
     })
-    console.log(imageInfoResponse)
+    isLoadImages.value = false
 }
 </script>
 <template>
-    <section class="search-form">
-        <div class="title-area">
-            <h2>検索フォーム</h2>
-        </div>
-        <dl class="search-box">
-            <div>
-                <dt>
-                    Twitter ID
-                    <em>*</em>
-                </dt>
-                <dd><input type="text" v-model="search.twitterID" /></dd>
+    <main class="main-container twi-template">
+        <section class="search-form">
+            <div class="title-area">
+                <h2>検索フォーム</h2>
             </div>
-            <div>
-                <dt>
-                    取得内容
-                    <em>*</em>
-                </dt>
-                <dd class="radio-list">
-                    <div>
+            <dl class="search-box">
+                <div>
+                    <dt>
+                        Twitter ID
+                        <em>*</em>
+                    </dt>
+                    <dd><input v-model="search.twitterID" type="text" /></dd>
+                </div>
+                <div>
+                    <dt>
+                        取得内容
+                        <em>*</em>
+                    </dt>
+                    <dd class="radio-list">
+                        <div>
+                            <input
+                                id="get-like"
+                                v-model="search.getTweetType"
+                                type="radio"
+                                value="liked_tweets"
+                            />
+                            <label for="get-like">いいね</label>
+                        </div>
+                        <div>
+                            <input
+                                id="get-tweet"
+                                v-model="search.getTweetType"
+                                type="radio"
+                                value="tweets"
+                            />
+                            <label for="get-tweet">ツイート</label>
+                        </div>
+                        <div>
+                            <input
+                                id="get-bookmark"
+                                v-model="search.getTweetType"
+                                type="radio"
+                                value="bookmarks"
+                                disabled
+                            />
+                            <label for="get-bookmark">ブックマーク</label>
+                        </div>
+                    </dd>
+                </div>
+                <div>
+                    <dt>
+                        取得ツイート数
+                        <em>*</em>
+                        <br />
+                        (最大300)
+                    </dt>
+                    <dd>
                         <input
-                            type="radio"
-                            id="get-like"
-                            value="liked_tweets"
-                            v-model="search.getTweetType"
+                            v-model="search.getNumberOfTweet"
+                            type="number"
+                            min="10"
+                            max="300"
+                            step="10"
                         />
-                        <label for="get-like">いいね</label>
-                    </div>
-                    <div>
+                    </dd>
+                </div>
+                <div>
+                    <dt>詳細設定</dt>
+                    <dd>
                         <input
-                            type="radio"
-                            id="get-tweet"
-                            value="tweets"
-                            v-model="search.getTweetType"
+                            id="get-pre"
+                            v-model="search.isGetFromPreviousTweet"
+                            type="checkbox"
                         />
-                        <label for="get-tweet">ツイート</label>
-                    </div>
-                    <div>
-                        <input
-                            type="radio"
-                            id="get-bookmark"
-                            value="bookmarks"
-                            v-model="search.getTweetType"
-                            disabled
-                        />
-                        <label for="get-bookmark">ブックマーク</label>
-                    </div>
-                </dd>
+                        <label for="get-pre">前回DLした画像以降を取得</label>
+                    </dd>
+                </div>
+                <div v-show="isLoadImages" class="btn-cover"></div>
+                <button class="btn-common green" @click="getTweet()">
+                    ツイートを取得
+                </button>
+            </dl>
+        </section>
+        <p>{{ errorMessage }}</p>
+        <section v-if="tweetInfo.length > 0" class="tweet-list post-list">
+            <div class="title-area">
+                <h2>取得ツイート一覧</h2>
+                <p v-if="tweetInfo.length > 0" class="caption">
+                    取得ツイート数: {{ tweetInfo.length }}
+                </p>
             </div>
-            <div>
-                <dt>
-                    取得ツイート数
-                    <em>*</em>
-                    <br />
-                    (最大300)
-                </dt>
-                <dd>
-                    <input
-                        type="number"
-                        v-model="search.getNumberOfTweet"
-                        min="10"
-                        max="300"
-                        step="10"
-                    />
-                </dd>
+            <div class="dl-image-area">
+                <div class="button-area">
+                    <div v-show="isLoadImages" class="btn-cover"></div>
+                    <button class="btn-common green" @click="dlImage()">
+                        ダウンロード
+                    </button>
+                </div>
+                <p class="caption">※選択している画像をDLします。</p>
             </div>
-            <div>
-                <dt>詳細設定</dt>
-                <dd>
-                    <input
-                        type="checkbox"
-                        id="get-pre"
-                        v-model="search.isGetFromPreviousTweet"
-                    />
-                    <label for="get-pre">前回DLした画像以降を取得</label>
-                </dd>
-            </div>
-            <button @click="getTweet()" class="btn-common green">
-                ツイートを取得
-            </button>
-        </dl>
-    </section>
-    <p>{{ errorMessage }}</p>
-    <section class="tweet-list" v-if="tweetInfo.length > 0">
-        <div class="title-area">
-            <h2>取得ツイート一覧</h2>
-            <p v-if="tweetInfo.length > 0" class="caption">
-                取得ツイート数: {{ tweetInfo.length }}
-            </p>
-        </div>
-        <div class="dl-image-area">
-            <button @click="dlImage()" class="btn-common green">
-                ダウンロード
-            </button>
-            <p class="caption">※選択している画像をDLします。</p>
-        </div>
-        <div v-for="tweet in tweetInfo" :key="tweet.postID" class="tweet-info">
-            <h3 class="user-name">{{ tweet.user }}</h3>
-            <p class="tweet-text">{{ tweet.text }}</p>
             <div
-                v-for="image in tweet.images"
-                :key="image.id"
-                class="tweet-image"
+                v-for="tweet in tweetInfo"
+                :key="tweet.postID"
+                class="post-info"
             >
-                <input
-                    type="checkbox"
-                    v-model="image.selected"
-                    :id="image.id"
-                />
-                <label
-                    :for="image.id"
-                    :class="!image.selected ? 'not-selected' : ''"
+                <h3 class="user-name">{{ tweet.user }}</h3>
+                <p class="tweet-text">{{ tweet.text }}</p>
+                <div
+                    v-for="image in tweet.images"
+                    :key="image.id"
+                    class="tweet-image"
                 >
-                    <img :src="image.url" :alt="tweet.text" />
-                </label>
+                    <input
+                        :id="image.id"
+                        v-model="image.selected"
+                        type="checkbox"
+                    />
+                    <label
+                        :for="image.id"
+                        :class="!image.selected ? 'not-selected' : ''"
+                    >
+                        <img :src="image.url" :alt="tweet.text" />
+                    </label>
+                </div>
+                <div class="post-url">
+                    <p>ツイート元リンク</p>
+                    <a :href="tweet.url">{{ tweet.url }}</a>
+                </div>
             </div>
-            <div class="tweet-url">
-                <p>ツイート元リンク</p>
-                <a :href="tweet.url">{{ tweet.url }}</a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 </template>

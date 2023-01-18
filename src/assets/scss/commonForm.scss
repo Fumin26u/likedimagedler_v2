@@ -1,0 +1,88 @@
+@import './style.scss';
+
+.search-form {
+    margin: 1em 0;
+}
+
+.search-box {
+    border: 2px dashed $border-color;
+    padding: 0 1em 1em;
+    > div {
+        padding: 16px 0;
+        border-bottom: 1px solid $border-color;
+    }
+    dt,
+    dd {
+        @include horizontalAlign;
+    }
+    dt {
+        width: 144px;
+    }
+    dd.radio-list > div {
+        @include horizontalAlign;
+    }
+    input[type='text'],
+    input[type='number'] {
+        width: 240px;
+        font-size: 16px;
+        padding: 4px 8px;
+    }
+    label {
+        margin-right: 8px;
+    }
+    > .btn-common {
+        font-size: 18px;
+        margin: 8px auto 0;
+        width: 160px;
+    }
+}
+
+.btn-cover {
+    border: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background-color: white;
+    opacity: 0.4;
+}
+
+.post-list {
+    @include horizontalAlignFlex;
+    flex-wrap: wrap;
+    > .title-area,
+    > .dl-image-area {
+        width: 100%;
+        margin-bottom: 1em;
+        > * {
+            @include horizontalAlign(text-bottom);
+        }
+        > p {
+            font-size: 14px;
+            margin-left: 1em;
+        }
+    }
+    > .dl-image-area > .button-area {
+        position: relative;
+    }
+
+    > .post-info {
+        width: 32%;
+        margin: 8px 0;
+        border-bottom: 1px solid $border-color;
+
+        > * {
+            display: block;
+            margin: 0;
+        }
+        > .user-name {
+            font-size: 18px;
+        }
+        > .post-url > * {
+            @include horizontalAlign;
+            font-size: 14px;
+        }
+    }
+}
