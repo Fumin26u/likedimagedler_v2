@@ -77,8 +77,8 @@ const loginAccount = async () => {
                                 <p class="caption">6文字以上20文字以下</p>
                                 <input
                                     id="user_name"
-                                    v-model="account.user_name"
                                     type="text"
+                                    v-model="account.user_name"
                                     autocomplete="username"
                                     :pattern="regex.user_name"
                                     required
@@ -93,8 +93,8 @@ const loginAccount = async () => {
                                 </p>
                                 <input
                                     id="password"
-                                    v-model="account.password"
                                     type="password"
+                                    v-model="account.password"
                                     autocomplete="current-password"
                                     :pattern="regex.password"
                                     required
