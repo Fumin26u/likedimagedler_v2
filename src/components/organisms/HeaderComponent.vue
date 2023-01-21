@@ -15,7 +15,7 @@ const userName = ref<string>('')
 // ログアウトリンクが押された場合APIに伝える
 const apiManager = new ApiManager()
 const execLogout = async () => {
-    await apiManager.post(apiPath + 'accountManager.php', {
+    await apiManager.post(apiPath + 'account/accountManager.php', {
         method: 'logout',
         user_name: userName.value,
     })
@@ -23,9 +23,12 @@ const execLogout = async () => {
 }
 
 const getUserInfo = async () => {
-    const response = await apiManager.post(apiPath + 'accountManager.php', {
-        method: 'getUserData',
-    })
+    const response = await apiManager.post(
+        apiPath + 'account/accountManager.php',
+        {
+            method: 'getUserData',
+        }
+    )
     return response.user_name
 }
 

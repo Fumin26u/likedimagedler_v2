@@ -45,7 +45,7 @@ const registerAccount = async () => {
 
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
     const response = await apiManager.post(
-        apiPath + 'accountManager.php',
+        apiPath + 'account/accountManager.php',
         account.value
     )
 

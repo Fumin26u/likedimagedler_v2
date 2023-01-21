@@ -1,5 +1,5 @@
-import axios from 'axios'
 /* eslint-disable */
+import axios from 'axios'
 class ApiManager {
     // POST
     async post(

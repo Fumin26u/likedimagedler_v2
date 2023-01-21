@@ -44,7 +44,7 @@ const loginAccount = async () => {
 
     // バリデーションを通過したらAPIを叩いてユーザーデータを登録
     const response = await apiManager.post(
-        apiPath + 'accountManager.php',
+        apiPath + 'account/accountManager.php',
         account.value
     )
 
@@ -68,7 +68,7 @@ const loginAccount = async () => {
                 <p>{{ errorMessage }}</p>
             </div>
             <div class="form-area">
-                <a href="./#/register">アカウント未登録の場合はこちら</a>
+                <a href="./#/register-pre">アカウント未登録の場合はこちら</a>
                 <form @submit.prevent="loginAccount()">
                     <dl>
                         <div>

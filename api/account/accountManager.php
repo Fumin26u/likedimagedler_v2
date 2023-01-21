@@ -1,5 +1,5 @@
 <?php
-$home = './';
+$home = '../';
 require_once $home . 'commonlib.php';
 
 header('Content-Type: application/json; charset=utf-8', true, 200);
