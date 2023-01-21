@@ -30,7 +30,7 @@ class AccountController {
             
             $rows = $st->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
-            
+
             return !empty($rows);
         } catch (PDOException $e) {
             echo 'データベース接続に失敗しました。';
@@ -102,7 +102,7 @@ class AccountController {
         }
 
         // ワンタイムトークンの作成
-        $token = hash('sha256', uniqid(rand()), true);
+        $token = bin2hex(random_bytes(16));
         $url = 'http://localhost:8080/#/register?t=' . $token;
 
         // DBに仮登録を行う
@@ -149,6 +149,43 @@ class AccountController {
         return $this->response;
     }
 
+    // ワンタイムトークンの認証
+    public function verifyToken($token) {
+        try {
+            $pdo = dbConnect();
+            $pdo->beginTransaction();
+    
+            $st = $pdo->prepare('SELECT email, req_time FROM user_pre WHERE token = :token');
+            $st->bindValue(':token', $token, PDO::PARAM_STR);
+            $st->execute();
+
+            $rows = $st->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+        } catch (PDOException $e) {
+            echo 'データベース接続に失敗しました。';
+            if (DEBUG) echo $e;
+        }
+
+        if (empty($rows)) {
+            $this->response['error'] = true;
+            $this->response['content'] = '入力されたトークンは正しくありません。';
+            return $this->response;
+        }
+
+        $date = $rows['req_time'];
+        // 現在時刻とDBの登録時刻を比較し1時間以内なら認証完了
+        $now = new DateTime();
+        $now = $now->modify('-1 Hour')->format('Y-m-d H:i:s');
+        if (!($now < $date)) {
+            $this->response['error'] = true;
+            $this->response['content'] = 'トークンの有効期限が切れました。';
+            return $this->response;
+        }
+
+        $this->response['content'] = $rows['email'];
+        return $this->response;
+    }
+
     // アカウントの登録処理
     public function register($post) {
         $error = $this->isExistAccount(h($post['email']), h($post['user_name']));
@@ -174,6 +211,11 @@ class AccountController {
             $st->bindValue(':email', h($post['email']), PDO::PARAM_STR);
             $st->bindValue(':user_name', h($post['user_name']), PDO::PARAM_STR);
             $st->bindValue(':password', password_hash(h($post['password']), PASSWORD_DEFAULT), PDO::PARAM_STR);
+            $st->execute();
+
+            // 仮ユーザーテーブルの更新
+            $st = $pdo->prepare('UPDATE user_pre SET is_submitted = TRUE WHERE email = :email');
+            $st->bindValue(':email', h($post['email']), PDO::PARAM_STR);
             $st->execute();
     
             $pdo->commit();
