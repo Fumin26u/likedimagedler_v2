@@ -1,0 +1,22 @@
+@import './style.scss';
+.tou {
+    margin: 1em auto;
+}
+
+.tou-content {
+    margin: 0 4em;
+}
+
+.tou-content > div {
+    margin: 2em 0;
+}
+
+.tou-content li, 
+.tou-content p {
+    margin: 8px 0;
+    list-style-type: decimal;
+}
+
+.tou-content ol > ol {
+    padding-left: 32px;
+}

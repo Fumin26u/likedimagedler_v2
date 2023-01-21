@@ -11,7 +11,7 @@ import apiPath from '@/assets/ts/apiPath'
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
-    twitterID: 'fumin_ci',
+    twitterID: '',
     getTweetType: 'liked_tweets',
     getNumberOfTweet: '100',
     isGetFromPreviousTweet: true,
