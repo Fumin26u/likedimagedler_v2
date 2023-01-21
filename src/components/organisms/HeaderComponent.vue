@@ -32,7 +32,7 @@ const getUserInfo = async () => {
 
     // pixivdlerアクセス時の認証
     if (
-        location.href.slice(-4) === 'pix' &&
+        location.href.slice(-4) === '/pix' &&
         response.user_name !== 'Fumiya0719'
     ) {
         router.push('./')

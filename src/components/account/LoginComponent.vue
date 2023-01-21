@@ -64,7 +64,7 @@ const loginAccount = async () => {
         <HeaderComponent />
         <main class="main-container login-component">
             <div class="title-area">
-                <h2>ユーザー新規登録</h2>
+                <h2>ユーザーログイン</h2>
                 <p>{{ errorMessage }}</p>
             </div>
             <div class="form-area">
