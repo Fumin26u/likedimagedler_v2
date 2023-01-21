@@ -5,8 +5,6 @@ import '@/assets/scss/organisms/header.scss'
 import ApiManager from '@/components/api/apiManager'
 import apiPath from '@/assets/ts/apiPath'
 
-console.log(location.href.slice(-4))
-
 interface Emits {
     (e: 'getUserInfo', userId: string): string
 }

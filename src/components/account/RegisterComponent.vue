@@ -18,7 +18,6 @@ const account = ref<Register>({
 // URLパラメータのトークンを照合
 const route = useRoute()
 const isCorrectAccess = ref<boolean>(true)
-console.log(route.query.t)
 const verifyToken = async () => {
     if (route.query.t === undefined) {
         isCorrectAccess.value = false
