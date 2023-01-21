@@ -25,9 +25,7 @@ switch ($post['method']) {
         $response = $accountController->login($post);
         break;
     case 'register-pre':
-        $response = $accountController->isExistEmail($post['email']);
-        if ($response['error']) break;
-
+        $url = $accountController->preRegister($post['email']);
         break;
     case 'register':
         $response = $accountController->register($post);
