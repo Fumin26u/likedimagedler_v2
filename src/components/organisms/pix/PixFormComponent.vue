@@ -145,6 +145,14 @@ const dlImage = async () => {
         <section class="search-form">
             <div class="title-area">
                 <h2>検索フォーム</h2>
+                <small>
+                    <a href="./#/terms-of-use">利用規約</a>
+                    と
+                    <a href="./#/privacy-policy">プライバシーポリシー</a>
+                    の確認をお願いします。
+                    <br />
+                    [ツイートを取得]ボタン押下時点で上記に同意したとみなします。
+                </small>
             </div>
             <dl class="search-box">
                 <div>
