@@ -103,7 +103,7 @@ class AccountController {
 
         // ワンタイムトークンの作成
         $token = bin2hex(random_bytes(16));
-        $url = 'https://fuminsv.sakura.ne.jp/id2test/#/register?t=' . $token;
+        $url = 'http://localhost/likedimagedler_v2/#/register?t=' . $token;
 
         // DBに仮登録を行う
         try {
