@@ -8,7 +8,7 @@ $post = json_decode(file_get_contents('php://input'), true);
 require_once('./controllers/AccountController.php');
 $accountController = new AccountController();
 
-$postMethods = ['logout', 'login', 'register', 'getUserData'];
+$postMethods = ['logout', 'login', 'register', 'register-pre', 'getUserData'];
 // 指定された方式以外が送られてきた場合はエラーを流し強制終了
 if (!isset($post['method']) || !in_array($post['method'], $postMethods)) {
     echo json_encode($accountController->sendErrorLog(), JSON_UNESCAPED_UNICODE);
@@ -25,7 +25,7 @@ switch ($post['method']) {
         $response = $accountController->login($post);
         break;
     case 'register-pre':
-        $url = $accountController->preRegister($post['email']);
+        $response = $accountController->preRegister($post['email']);
         break;
     case 'register':
         $response = $accountController->register($post);

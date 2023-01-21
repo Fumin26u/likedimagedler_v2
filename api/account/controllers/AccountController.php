@@ -19,7 +19,7 @@ class AccountController {
     }
 
     // 送られてきたメアドが既存かどうか調べる
-    public function isExistEmail($email) {
+    private function isExistEmail($email) {
         try {
             $pdo = dbConnect();
             $pdo->beginTransaction();
@@ -30,7 +30,7 @@ class AccountController {
             
             $rows = $st->fetch(PDO::FETCH_ASSOC);
             $pdo->commit();
-
+            
             return !empty($rows);
         } catch (PDOException $e) {
             echo 'データベース接続に失敗しました。';
@@ -59,7 +59,7 @@ class AccountController {
     }
 
     // 仮登録メールの送信 
-    public function sendPreSignupMail($email, $url) {
+    private function sendPreSignupMail($email, $url) {
         $mail_content = <<<EOM
 
         ＝＝＝＝＝＝＝＝＝＝仮登録通知＝＝＝＝＝＝＝＝＝＝
@@ -95,7 +95,7 @@ class AccountController {
     public function preRegister($email) {
         // アカウントが既存かどうか判定
         $isExistEmail = $this->isExistEmail($email);
-        if (!$isExistEmail) {
+        if ($isExistEmail) {
             $this->response['error'] = true;
             $this->response['content'] = '既に使用されているメールアドレスです。';
             return $this->response;
@@ -103,7 +103,7 @@ class AccountController {
 
         // ワンタイムトークンの作成
         $token = hash('sha256', uniqid(rand()), true);
-        $url = 'https://fuminsv.sakura.ne.jp/id2test/#/register?t=' . $token;
+        $url = 'http://localhost:8080/#/register?t=' . $token;
 
         // DBに仮登録を行う
         try {

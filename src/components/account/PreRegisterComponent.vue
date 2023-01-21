@@ -21,6 +21,7 @@ const registerAccount = async () => {
         apiPath + 'account/accountManager.php',
         account.value
     )
+    console.log(response)
 
     // 入力内容が不正の場合
     if (response.error) {
