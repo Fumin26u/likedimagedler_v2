@@ -8,10 +8,11 @@ import {
     TweetImage,
 } from '@/assets/interfaces/interfaces'
 import apiPath from '@/assets/ts/apiPath'
+import versionLog from '@/assets/ts/versions'
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
-    twitterID: 'fumin_ci',
+    twitterID: '',
     getTweetType: 'liked_tweets',
     getNumberOfTweet: '100',
     isGetFromPreviousTweet: true,
@@ -47,7 +48,7 @@ const getTweet = async () => {
 
     const url = apiPath + 'twi/tweetManager.php'
     const response = await apiManager.get(url, search.value)
-    console.log(response)
+
     // それぞれの画像にDL可否判定の値を追加
     tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
         return {
@@ -109,6 +110,14 @@ const dlImage = async () => {
         <section class="search-form">
             <div class="title-area">
                 <h2>検索フォーム</h2>
+                <small>
+                    <a href="./#/terms-of-use">利用規約</a>
+                    と
+                    <a href="./#/privacy-policy">プライバシーポリシー</a>
+                    の確認をお願いします。
+                    <br />
+                    [ツイートを取得]ボタン押下時点で上記に同意したとみなします。
+                </small>
             </div>
             <dl class="search-box">
                 <div>
@@ -232,6 +241,18 @@ const dlImage = async () => {
                     <a :href="tweet.url">{{ tweet.url }}</a>
                 </div>
             </div>
+        </section>
+        <section class="version">
+            <h3>更新履歴</h3>
+            <dl class="version-list">
+                <div v-for="(version, index) in versionLog" :key="index">
+                    <dt>{{ version.date }}</dt>
+                    <dd>
+                        <p class="version-number">Ver. {{ version.version }}</p>
+                        <p>{{ version.content }}</p>
+                    </dd>
+                </div>
+            </dl>
         </section>
     </main>
 </template>

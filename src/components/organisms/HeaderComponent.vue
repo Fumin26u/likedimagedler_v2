@@ -29,6 +29,14 @@ const getUserInfo = async () => {
             method: 'getUserData',
         }
     )
+
+    // pixivdlerアクセス時の認証
+    if (
+        location.href.slice(-4) === '/pix' &&
+        response.user_name !== 'Fumiya0719'
+    ) {
+        router.push('./')
+    }
     return response.user_name
 }
 
@@ -45,13 +53,14 @@ onMounted(async () => {
             <div class="title-area">
                 <a href="./">
                     <h1>ImageDLer</h1>
-                    <p class="caption">Twitter/pixivの画像自動ダウンローダー</p>
+                    <p class="caption">Twitterの画像自動ダウンローダー</p>
                 </a>
             </div>
             <nav class="header-nav">
-                <a href="" class="btn-small blue">注意事項</a>
-                <a href="" class="btn-small blue">更新履歴</a>
-                <a href="./#/pix" class="btn-small blue">pixiv版</a>
+                <a href="./#/terms-of-use" class="btn-small blue">利用規約</a>
+                <a href="./#/privacy-policy" class="btn-small blue">
+                    プライバシーポリシー
+                </a>
             </nav>
         </div>
         <div class="header-account">
@@ -67,7 +76,7 @@ onMounted(async () => {
             </div>
             <div v-else>
                 <a href="./#/login" class="btn-common blue">ログイン</a>
-                <a href="./#/register" class="btn-common green">
+                <a href="./#/register-pre" class="btn-common green">
                     アカウント登録
                 </a>
             </div>

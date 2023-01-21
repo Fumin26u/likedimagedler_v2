@@ -64,7 +64,7 @@ const loginAccount = async () => {
         <HeaderComponent />
         <main class="main-container login-component">
             <div class="title-area">
-                <h2>ユーザー新規登録</h2>
+                <h2>ユーザーログイン</h2>
                 <p>{{ errorMessage }}</p>
             </div>
             <div class="form-area">
@@ -77,8 +77,8 @@ const loginAccount = async () => {
                                 <p class="caption">6文字以上20文字以下</p>
                                 <input
                                     id="user_name"
-                                    v-model="account.user_name"
                                     type="text"
+                                    v-model="account.user_name"
                                     autocomplete="username"
                                     :pattern="regex.user_name"
                                     required
@@ -93,8 +93,8 @@ const loginAccount = async () => {
                                 </p>
                                 <input
                                     id="password"
-                                    v-model="account.password"
                                     type="password"
+                                    v-model="account.password"
                                     autocomplete="current-password"
                                     :pattern="regex.password"
                                     required
