@@ -18,6 +18,31 @@ class AccountController {
         return $this->response;
     }
 
+    // 送られてきたメアドが既存かどうか調べる
+    public function isExistEmail($email) {
+        try {
+            $pdo = dbConnect();
+            $pdo->beginTransaction();
+
+            $st = $pdo->prepare('SELECT email FROM user WHERE email = :email');
+            $st->bindValue(':email', $email, PDO::PARAM_STR);
+            $st->execute();
+            
+            $rows = $st->fetch(PDO::FETCH_ASSOC);
+            $pdo->commit();
+
+            if (!empty($rows)) {
+                $this->response['error'] = true;
+                $this->response['content'] = '既に使用されているメールアドレスです。';
+            }
+
+            return $this->response;
+        } catch (PDOException $e) {
+            echo 'データベース接続に失敗しました。';
+            if (DEBUG) echo $e;
+        }
+    }
+
     // 送られてきたメアドとユーザーIDが既存かどうか調べる
     private function confirmIsExistSameData($email, $user_name) {
         try {

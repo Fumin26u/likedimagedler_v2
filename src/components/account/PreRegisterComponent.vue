@@ -7,7 +7,7 @@ import '@/assets/scss/accountManager.scss'
 
 // フォーム入力内容
 const account = ref<{ [key: string]: string }>({
-    method: 'pre',
+    method: 'register-pre',
     email: '',
 })
 // 結果表示用のメッセージ
