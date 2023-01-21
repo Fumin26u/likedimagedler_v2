@@ -78,7 +78,7 @@ onMounted(async () => {
             </div>
             <div v-else>
                 <a href="./#/login" class="btn-common blue">ログイン</a>
-                <a href="./#/register" class="btn-common green">
+                <a href="./#/register-pre" class="btn-common green">
                     アカウント登録
                 </a>
             </div>
