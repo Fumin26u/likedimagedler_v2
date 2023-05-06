@@ -12,9 +12,9 @@ import versionLog from '@/assets/ts/versions'
 
 // 入力フォームの値
 const search = ref<TwiSearch>({
-    twitterID: '',
+    twitterID: 'fumin_ci',
     getTweetType: 'liked_tweets',
-    getNumberOfTweet: '100',
+    getNumberOfTweet: '50',
     isGetFromPreviousTweet: true,
 })
 
@@ -48,6 +48,7 @@ const getTweet = async () => {
 
     const url = apiPath + 'twi/tweetManager.php'
     const response = await apiManager.get(url, search.value)
+    console.log(response)
 
     // それぞれの画像にDL可否判定の値を追加
     tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
