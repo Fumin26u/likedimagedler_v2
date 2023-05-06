@@ -61,6 +61,7 @@ onMounted(async () => {
                 <a href="./#/privacy-policy" class="btn-small blue">
                     プライバシーポリシー
                 </a>
+                <a href="./#/pix" class="btn-small blue">pixiv版</a>
             </nav>
         </div>
         <div class="header-account">

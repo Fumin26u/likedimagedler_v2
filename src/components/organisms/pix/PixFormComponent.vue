@@ -11,9 +11,9 @@ import apiPath from '@/assets/ts/apiPath'
 
 // 入力フォームの値
 const search = ref<PixSearch>({
-    userID: 78079062,
+    userID: 13936467,
     getPostType: 'bookmark',
-    getNumberOfPost: '10',
+    getNumberOfPost: '100',
     isGetFromPreviousPost: true,
     includeTags: false,
     suspendID: '',
