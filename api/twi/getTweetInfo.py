@@ -80,7 +80,6 @@ def getTweetId(target):
     return url.split('/')[3]
 
 # 個々のツイート情報を取得
-# {"twitterID": "fumin_ci", "getTweetType": "liked_t…weet": false, "suspendID": "1642089466834882560"}
 def getEachTweet(article):
     tweetInfo = dict()
     # ユーザー名の取得
