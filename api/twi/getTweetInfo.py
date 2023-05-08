@@ -1,4 +1,4 @@
-import sys, json
+import sys, json, pprint
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -25,8 +25,6 @@ GET_QUERY = makeDictFromQuery(sys.argv[1])
 
 # ツイート情報の取得
 def getTweet(query, header, interval):
-    tweetInfo = dict()
-
     # 待機時間
     INTERVAL = interval
     # 初期リンク
@@ -44,8 +42,6 @@ def getTweet(query, header, interval):
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.TAG_NAME, 'article')))
 
     # 必要なツイート情報を取得
-    # 以下のclassをすべて持つdivタグ内のimgタグのsrc属性を取得
-    # css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-11wrixw r-61z16t r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010
     # 同様にツイートIDを取得するために以下のclassをすべて持つaタグのhref属性を取得
     # css-4rbku5 css-18t94o4 css-1dbjc4n r-1loqt21 r-1pi2tsx r-1ny4l3l
 
@@ -53,6 +49,11 @@ def getTweet(query, header, interval):
     for i in range(query['getNumberOfTweet']):
         scrollAndSuspendGetTweet(driver, i, str(query['suspendID']))
         sleep(INTERVAL)
+
+    tweetInfo = []
+    # 読み込んだツイートからツイート情報を取得する
+    for article in driver.find_elements_by_tag_name('article'):
+        tweetInfo.append(getEachTweet(article))
 
     # ドライバを終了
     driver.quit()
@@ -77,6 +78,24 @@ def getTweetId(target):
     url = target.find_element_by_css_selector('.css-4rbku5.css-18t94o4.css-1dbjc4n.r-1loqt21.r-1pi2tsx.r-1ny4l3l').get_attribute('href')
     # urlをスラッシュ毎に分割し、3番目の要素がIDなのでそれを取得し返却
     return url.split('/')[3]
+
+# 個々のツイート情報を取得
+# {"twitterID": "fumin_ci", "getTweetType": "liked_t…weet": false, "suspendID": "1642089466834882560"}
+def getEachTweet(article):
+    tweetInfo = dict()
+    # ユーザー名の取得
+
+    # ツイート内容を取得
+
+    # 画像のdivタグ内のimgタグのsrc属性の取得
+    # memo 複数枚対応する
+    images = article.find_element_by_css_selector('.css-1dbjc4n.r-1p0dtai.r-1mlwlqe.r-1d2f490.r-11wrixw.r-61z16t.r-1udh08x.r-u8s1d.r-zchlnj.r-ipm5af.r-417010').find_elements_by_tag_name('img')
+    for image in images:
+        tweetInfo['images'] = image.get_attribute('src')
+
+    # ツイート元のURLを取得
+    tweetInfo['url'] = 'https://twitter.com' + article.find_element_by_css_selector('.css-4rbku5.css-18t94o4.css-1dbjc4n.r-1loqt21.r-1pi2tsx.r-1ny4l3l').get_attribute('href')
+    return tweetInfo
     
 
 headers = {
