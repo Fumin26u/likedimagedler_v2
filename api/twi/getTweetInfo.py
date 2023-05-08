@@ -25,6 +25,8 @@ GET_QUERY = makeDictFromQuery(sys.argv[1])
 
 # ツイート情報の取得
 def getTweet(query, header, interval):
+    tweetInfo = dict()
+
     # 待機時間
     INTERVAL = interval
     # 初期リンク
@@ -40,9 +42,42 @@ def getTweet(query, header, interval):
     driver = webdriver.Chrome('./chromedriver', options=options)
     driver.get(initUrl)
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.TAG_NAME, 'article')))
-    # 画像に直飛びできるリンクを踏む。
-    # 以下のclassをすべて持つaタグを取得しクリック
+
+    # 必要なツイート情報を取得
+    # 以下のclassをすべて持つdivタグ内のimgタグのsrc属性を取得
+    # css-1dbjc4n r-1p0dtai r-1mlwlqe r-1d2f490 r-11wrixw r-61z16t r-1udh08x r-u8s1d r-zchlnj r-ipm5af r-417010
+    # 同様にツイートIDを取得するために以下のclassをすべて持つaタグのhref属性を取得
     # css-4rbku5 css-18t94o4 css-1dbjc4n r-1loqt21 r-1pi2tsx r-1ny4l3l
+
+    # ツイート取得数上限か、前回保存した画像のIDに達するまで、次の記事にスクロールしてツイートを読み込む
+    for i in range(query['getNumberOfTweet']):
+        scrollAndSuspendGetTweet(driver, i, str(query['suspendID']))
+        sleep(INTERVAL)
+
+    # ドライバを終了
+    driver.quit()
+
+# ドライバのスクロール処理
+def scrollAndSuspendGetTweet(driver, nextArticle: int, suspendId: str):
+    # 毎回大量のarticleを読み込むことになりそうなので新しく出現したarticleのみ読み込むようにしたい
+    articles = driver.find_elements_by_tag_name('article')
+
+    # 現在読み込まれている最後のツイートのIDを取得し、既に取得済みならスクロールを終了
+    lastArticleId = getTweetId(articles[-1])
+    if str(lastArticleId) == suspendId: return
+
+    # 指定した場所にスクロール
+    scrollTo = articles[nextArticle]
+    actions = ActionChains(driver)
+    actions.move_to_element(scrollTo)
+    actions.perform()
+
+# 対象のツイートが取得済みかどうか判定
+def getTweetId(target):
+    url = target.find_element_by_css_selector('.css-4rbku5.css-18t94o4.css-1dbjc4n.r-1loqt21.r-1pi2tsx.r-1ny4l3l').get_attribute('href')
+    # urlをスラッシュ毎に分割し、3番目の要素がIDなのでそれを取得し返却
+    return url.split('/')[3]
+    
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.5615.139 Safari/537.36'
