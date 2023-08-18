@@ -49,5 +49,4 @@ if ($latestDL !== '') {
 // クエリを実行
 $query = implode(',', $queryArray);
 exec("python getTweetInfo.py $query", $output);
-echo json_encode($output[0]);
-// return json_encode(['content' => $query], JSON_UNESCAPED_UNICODE);
+echo json_encode(json_decode($output[0]), JSON_UNESCAPED_UNICODE);
