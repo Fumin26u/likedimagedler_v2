@@ -2,21 +2,10 @@
 import { ref } from 'vue'
 import '@/assets/scss/organisms/twiForm.scss'
 import ApiManager from '@/components/api/apiManager'
-import {
-    TwiSearch,
-    TweetInfo,
-    TweetImage,
-} from '@/assets/interfaces/interfaces'
+import { TweetInfo, TweetImage } from '@/assets/interfaces/interfaces'
+import { twiUserData as search } from '@/assets/ts/userData'
 import apiPath from '@/assets/ts/apiPath'
 import versionLog from '@/assets/ts/versions'
-
-// 入力フォームの値
-const search = ref<TwiSearch>({
-    twitterID: '',
-    getTweetType: 'liked_tweets',
-    getNumberOfTweet: '100',
-    isGetFromPreviousTweet: true,
-})
 
 const errorMessage = ref<string>('')
 // 入力フォームのバリデーション
@@ -30,8 +19,8 @@ const inputValidation = (): string => {
     if (isNaN(numTweet)) {
         error = '取得ツイート数は数値で入力してください。'
     }
-    if (numTweet < 10 || numTweet > 300) {
-        error = '取得できるツイートの最小値は10, 最大値は300です。'
+    if (numTweet < 5 || numTweet > 3000) {
+        error = '取得できるツイートの最小値は10, 最大値は3000です。'
     }
     return error
 }
@@ -48,9 +37,9 @@ const getTweet = async () => {
 
     const url = apiPath + 'twi/tweetManager.php'
     const response = await apiManager.get(url, search.value)
-
+    console.log(response)
     // それぞれの画像にDL可否判定の値を追加
-    tweetInfo.value = response.content.tweetInfo.map((tweet: TweetInfo) => {
+    tweetInfo.value = response.content.map((tweet: TweetInfo) => {
         return {
             postID: tweet.postID,
             post_time: tweet.post_time,
@@ -86,15 +75,24 @@ const dlImage = async () => {
     // 選択した画像一覧の配列を作成
     const imagePaths = getSelectedImagesFromTweets(tweetInfo.value)
     // DLする画像一覧のURLクエリを取得
-    const uriResponse = await apiManager.get(
-        apiPath + 'twi/getSearchParams.php',
+    const downloadResponse = await apiManager.post(
+        apiPath + 'twi/imageManager.php',
         {
-            images: imagePaths,
+            content: imagePaths,
         }
     )
-    const searchParams = uriResponse.content.uri
-    // APIのURLとクエリを結合してダウンロードページを開く
-    window.open(`${apiPath}twi/imageManager.php${searchParams}`)
+    console.log(downloadResponse)
+
+    // 画像のDLとzipファイルの作成に成功した場合、zipをDLする
+    if (!downloadResponse.isSuccessDownload) {
+        errorMessage.value = downloadResponse.content
+        return
+    }
+
+    const link = document.createElement('a')
+    link.download = 'images.zip'
+    link.href = apiPath + 'twi/images.zip'
+    link.click()
 
     // APIを叩いて保存回数と画像保存枚数、最新取得画像を更新
     await apiManager.post(apiPath + 'twi/imageInfoManager.php', {
@@ -102,6 +100,17 @@ const dlImage = async () => {
         latestID: tweetInfo.value[0].postID,
         twitterID: search.value.twitterID,
     })
+
+    // zipファイルと画像ディレクトリを一括消去
+    const removeResponse = await apiManager.post(
+        apiPath + 'twi/removeImage.php'
+    )
+    console.log(removeResponse)
+
+    if (!removeResponse.isSuccessRemove) {
+        errorMessage.value = removeResponse.content
+        return
+    }
     isLoadImages.value = false
 }
 </script>
@@ -148,6 +157,7 @@ const dlImage = async () => {
                                 v-model="search.getTweetType"
                                 type="radio"
                                 value="tweets"
+                                disabled
                             />
                             <label for="get-tweet">ツイート</label>
                         </div>
@@ -174,9 +184,9 @@ const dlImage = async () => {
                         <input
                             v-model="search.getNumberOfTweet"
                             type="number"
-                            min="10"
-                            max="300"
-                            step="10"
+                            min="5"
+                            max="1000"
+                            step="5"
                         />
                     </dd>
                 </div>
@@ -237,8 +247,7 @@ const dlImage = async () => {
                     </label>
                 </div>
                 <div class="post-url">
-                    <p>ツイート元リンク</p>
-                    <a :href="tweet.url">{{ tweet.url }}</a>
+                    <a :href="tweet.url">ツイート元リンク</a>
                 </div>
             </div>
         </section>

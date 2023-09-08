@@ -1,113 +1,52 @@
 <?php
 $home = '../';
-require_once $home . 'commonlib.php';
 
-// 非ログイン時強制終了
-if (isset($_SESSION['user_id']) && $_SESSION['user_id'] === '') {
+require_once $home . 'commonlib.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json; charset=utf-8', true, 200);
+    $post = json_decode(file_get_contents('php://input'), true);
+}
+
+// POSTで渡ったURL一覧から画像をダウンロード
+$urls = $post['content'];
+$queue = [];
+for ($i = 0; $i < count($urls); $i++) {
+    // &が入っているとexecが正しく実行されないようなので仮文字列に変換
+    $replaceUrl = str_replace('&', '0AND0', $urls[$i]);
+    $queue[] = $replaceUrl;
+    // 20枚ごとにurlを分割してdlを行う(リンク数が多いと正常にDLできない為)
+    if ($i % 20 === 0 || $i === count($urls) - 1) {
+        $query = h(implode(',', $queue));
+        exec("python dlImage.py $query", $output);
+        $result = json_decode($output[0]);
+        if ($result->error) break;
+
+        $queue = [];
+    }
+}
+
+$response = [
+    'isSuccessDownload' => true,
+    'content' => ''
+];
+// 正常にDL出来なかった場合エラーを返却して終了
+if ($result->error) {
+    $response['isSuccessDownload'] = false;
+    $response['content'] = '画像のダウンロードに失敗しました。';
+    echo json_encode($response, JSON_THROW_ON_ERROR);
     exit;
 }
 
-use \ZipArchive as ZipArchive;
+// DLが完了した場合zip変換
+$zipFileName = 'images.zip';
+exec("zip -r $zipFileName ./images");
 
-// 拡張子の判別
-function identifyExtension(string $file) {
-    switch (substr($file, -4, 4)) {
-        case '.jpg':
-            return [
-                'error' => false,
-                'trim' => '.jpg',
-                'format' => 'jpg'
-            ];
-        case '.png':
-            return [
-                'error' => false,
-                'trim' => '.png',
-                'format' => 'png'
-            ];
-        case 'jpeg':
-            return [
-                'error' => false,
-                'trim' => '.jpeg',
-                'format' => 'jpeg'
-            ];
-        case 'jfif':
-            return [
-                'error' => false,
-                'trim' => '.jfif',
-                'format' => 'jfif'
-            ];
-        default:
-            return [
-                'error' => true,
-                'content' => 'フォーマット形式が正しくありません。'
-            ];
-    }
+if (file_exists($zipFileName)) {
+    $response['content'] = 'zipファイルを作成しました。';
+} else {
+    $response['isSuccessDownload'] = false;
+    $response['content'] = '指定されたzipファイルは存在しません。';
 }
 
-// DL時のファイル名
-$fileName = 'images.zip';
-// Formから送られた画像URL一覧
-$images = $_GET['images'];
-
-$zip = new ZipArchive();
-$zip->open($fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-// 画像を取り込んだZipファイルの作成
-foreach ($images as $image) {
-    // 拡張子を取り除き最大画素の画像URLを作成
-    $extension = identifyExtension($image);
-    // ファイル形式が画像以外の場合はスルー
-    if ($extension['error']) continue;
-
-    $trim = $extension['trim'];
-    $format = $extension['format'];
-    $imageUrl = rtrim($image, $trim) . "?format={$format}&name=orig";
-
-    $filePath = $image;
-    $curlHandle = curl_init($imageUrl);
-    curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-    curl_setopt($curlHandle, CURLOPT_NOBODY, 0);
-
-    // タイムアウト値
-    curl_setopt($curlHandle, CURLOPT_TIMEOUT, 480);
-
-    curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 1);
-
-    $outputImage = curl_exec($curlHandle);
-    $status = curl_getinfo($curlHandle, CURLINFO_HTTP_CODE);
-
-    // ファイル取得成功時、Zipファイルに画像を挿入
-    if ($status === 200 && mb_strlen($outputImage) != 0) {
-        $zip->addFromString(basename($filePath), $outputImage);
-    }
-
-    curl_close($curlHandle);
-    sleep(2);
-}
-$zip->close();
-// 作成したZipファイルのDL
-header("Content-Type: application/zip");
-header("Content-Disposition: attachment; filename=\"".basename($fileName)."\"");
-ob_end_clean();
-readfile($fileName);
-
-// Zipファイルを消去
-unlink($fileName);
-?>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <title>ImageDLer</title>
-    <script lang="js">
-        {
-            // DLが完了したらタブを閉じる
-            window.close();
-        }
-    </script>
-</head>
-<body>
-    <p>ダウンロード処理中です。完了までしばらくお待ちください。</p>
-    <p>ダウンロード完了時自動で画面が閉じます。</p>
-</body>
-</html>
+echo json_encode($response, JSON_THROW_ON_ERROR);
+// echo json_encode(['content' => $result], JSON_THROW_ON_ERROR);

@@ -28,6 +28,11 @@ GitHub Usage.md
 apiKey.php
 api/*/images
 api/pix/config.py
-api/pix/chromedriver.exe
 api/pix/__pycache__
 api/pix/pixiv_auth.py
+
+getTweetInfo.py
+userData.ts
+tagList.py
+chromedriver.exe
+twitterPassword.py

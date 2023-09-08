@@ -5,7 +5,7 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 // ClickJacking対策
 header('X-FRAME-OPTIONS: SAMEORIGIN');
 // タイムアウト制限時間
-ini_set("max_execution_time", 600);
+ini_set("max_execution_time", 12000);
 
 require_once("./database/system-conf.php");
 
