@@ -2,21 +2,10 @@
 import { ref } from 'vue'
 import '@/assets/scss/organisms/twiForm.scss'
 import ApiManager from '@/components/api/apiManager'
-import {
-    TwiSearch,
-    TweetInfo,
-    TweetImage,
-} from '@/assets/interfaces/interfaces'
+import { TweetInfo, TweetImage } from '@/assets/interfaces/interfaces'
+import { twiUserData as search } from '@/assets/ts/userData'
 import apiPath from '@/assets/ts/apiPath'
 import versionLog from '@/assets/ts/versions'
-
-// 入力フォームの値
-const search = ref<TwiSearch>({
-    twitterID: 'fumin_ci',
-    getTweetType: 'liked_tweets',
-    getNumberOfTweet: '20',
-    isGetFromPreviousTweet: true,
-})
 
 const errorMessage = ref<string>('')
 // 入力フォームのバリデーション
@@ -30,8 +19,8 @@ const inputValidation = (): string => {
     if (isNaN(numTweet)) {
         error = '取得ツイート数は数値で入力してください。'
     }
-    if (numTweet < 5 || numTweet > 300) {
-        error = '取得できるツイートの最小値は10, 最大値は300です。'
+    if (numTweet < 5 || numTweet > 3000) {
+        error = '取得できるツイートの最小値は10, 最大値は3000です。'
     }
     return error
 }
@@ -196,7 +185,7 @@ const dlImage = async () => {
                             v-model="search.getNumberOfTweet"
                             type="number"
                             min="5"
-                            max="300"
+                            max="1000"
                             step="5"
                         />
                     </dd>

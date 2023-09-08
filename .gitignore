@@ -33,3 +33,7 @@ api/pix/__pycache__
 api/pix/pixiv_auth.py
 
 getTweetInfo.py
+userData.ts
+tagList.py
+chromedriver.exe
+twitterPassword.py

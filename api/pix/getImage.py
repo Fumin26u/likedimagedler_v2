@@ -4,23 +4,8 @@ from time import sleep
 from pixivpy3 import *
 # import APIkey
 import config
-
-TAG_LIST = [
-    'オリジナル',
-    'アイドルマスターミリオンライブ!',
-    # 'アイドルマスターシャイニーカラーズ',
-    'ご注文はうさぎですか?',
-    'アズールレーン',
-    'ブルーアーカイブ',
-    'きんいろモザイク',
-    '同人',
-    '創作',
-    # '女の子',
-]
-
-EX_TAG_LIST = [
-    'VTuber',
-]
+# import get_tag_list
+import tagList
 
 # Auth接続
 aapi = AppPixivAPI()
@@ -127,10 +112,10 @@ while isContinueRefers:
 
             # 必要情報設定
             # 取得作品のタグとユーザー設定値を比較し一致するタグが無い場合は取得しない
-            if len(list(set(TAG_LIST) & set(illustTagList))) == 0 and TAG_LIST != []:
+            if len(list(set(tagList.TAG_LIST) & set(illustTagList))) == 0 and tagList.TAG_LIST != []:
                 continue
             # 取得作品のタグとユーザー設定値を比較し一致するタグが存在したら取得しない
-            if len(list(set(EX_TAG_LIST) & set(illustTagList))) > 0:
+            if len(list(set(tagList.EX_TAG_LIST) & set(illustTagList))) > 0:
                 continue
 
         # -------------------- ここまでvue/PHP未実装

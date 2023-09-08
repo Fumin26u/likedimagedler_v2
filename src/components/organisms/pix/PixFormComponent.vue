@@ -2,22 +2,9 @@
 import { ref } from 'vue'
 import '@/assets/scss/organisms/pixForm.scss'
 import ApiManager from '@/components/api/apiManager'
-import {
-    PixSearch,
-    PixPostInfo,
-    PixPostImage,
-} from '@/assets/interfaces/interfaces'
+import { PixPostInfo, PixPostImage } from '@/assets/interfaces/interfaces'
+import { pixUserData as search } from '@/assets/ts/userData'
 import apiPath from '@/assets/ts/apiPath'
-
-// 入力フォームの値
-const search = ref<PixSearch>({
-    userID: 13936467,
-    getPostType: 'bookmark',
-    getNumberOfPost: '100',
-    isGetFromPreviousPost: true,
-    includeTags: false,
-    suspendID: '',
-})
 
 const errorMessage = ref<string>('')
 // 入力フォームのバリデーション
