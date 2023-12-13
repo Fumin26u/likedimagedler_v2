@@ -38,6 +38,7 @@ const getTweet = async () => {
     const url = apiPath + 'twi/tweetManager.php'
     const response = await apiManager.get(url, search.value)
     // それぞれの画像にDL可否判定の値を追加
+    console.log(response)
     tweetInfo.value = response.content.map((tweet: TweetInfo) => {
         return {
             postID: tweet.postID,
